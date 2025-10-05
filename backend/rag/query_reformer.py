@@ -15,7 +15,7 @@ from dataclasses import dataclass
 from langchain_openai import ChatOpenAI
 from langchain.prompts import PromptTemplate
 
-DEFAULT_CHAT_MODEL =  "gpt-4o-mini"
+DEFAULT_CHAT_MODEL = "gpt-4o-mini"
 
 @dataclass
 class ReformedQueries:
@@ -37,7 +37,7 @@ class QueryReformer:
                 "- Scientific synonyms, related pathways, and organism/model variants\n"
                 "- Outcomes/phenotypes, exposure context (microgravity, radiation), and mission terms (ISS)\n"
                 "- Keep each query < 16 words. Do NOT number them. One per line.\n\n"
-                "- IMPORTANT: Return all queries in English regardless of the question language.\n\n" # multiquery english only
+                "- IMPORTANT: Return all queries in English regardless of the question language.\n\n"  # Force multi-query outputs to English
                 "Question: {question}\n"
                 "Queries:"
             ),
@@ -49,7 +49,7 @@ class QueryReformer:
                 "Write a short factual abstract (120-200 words) that could appear in a NASA bioscience paper, "
                 "summarizing likely findings that directly address the question below. "
                 "Focus on RESULTS-like content and technical terms, avoid speculation.\n\n"
-                "Write the abstract in English regardless of the question language.\n\n" # hyde english only
+                "Write the abstract in English regardless of the question language.\n\n"  # Force HyDE abstract to be in English
                 "Question: {question}\n\n"
                 "Abstract:"
             ),

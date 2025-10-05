@@ -3,9 +3,9 @@
 """
 End-to-end scientific RAG query pipeline:
 - Query reformation (optional; rules + multi-query + HyDE if available)
-- Retrieval per query (FAISS index from scripts/embedding.py)
+- Retrieval per query (FAISS index from rag/embedding.py)
 - RRF fusion
-- Figure attachment collection (direct figure chunks + 'Figure N' resolution via article.json)
+- Figure attachment collection (direct figure chunks + 'Figure N' resolution via meta.jsonl)
 - Answer generation with strict citation style [PMCID]
 """
 from __future__ import annotations

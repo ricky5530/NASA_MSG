@@ -1,6 +1,6 @@
-# NASA_MSG RAG (backend/rag)
+# RAG (backend/rag)
 
-Retrieval-Augmented Generation for scientific literature (PubMed Central, PMC). Built for hackathons: minimal setup, one-command smoke tests, clear citations.
+#### Retrieval-Augmented Generation for scientific literature (PubMed Central, PMC).
 
 Key features
 - OpenAI embeddings (text-embedding-3-small) + FAISS search
@@ -27,27 +27,8 @@ Note: Index files default to `backend/data/index/{faiss.index, meta.jsonl}`.
 Data files
 - `../data/index/faiss.index` – FAISS index
 - `../data/index/meta.jsonl` – metadata per chunk (one JSON per line)
-
----
-
-## Setup
-
-Prereqs
-- Python 3.10+
-- OpenAI API key (via .env)
-
-Create `backend/.env`:
-
-```
-OPENAI_API_KEY=sk-...
-```
-
-Install deps (WSL/bash):
-
-```bash
-cd NASA_MSG/backend
-pip install -r requirements.txt
-```
+- `../data/index/meta.jsonl` – metadata per chunk (JSON records)
+- `../data/raw/SB_publication_PMC.csv` – list of original source papers (titles and links) for provenance and crawl/bootstrap
 
 ---
 
@@ -68,7 +49,7 @@ Outputs
 - `data/index/faiss.index`
 - `data/index/meta.jsonl`
 
-`meta.jsonl` schema (per line):
+`meta.jsonl` schema (per record):
 - `id`: chunk id (e.g., "PMC12345::sec0::chunk1" or "PMC12345::fig2")
 - `pmcid`: PMCID
 - `title`: article title
@@ -79,21 +60,6 @@ Outputs
 - `figure_tileshop`: tileshop URL (optional)
 - `figure_image_urls`: array of image URLs
 - `text`: text used for embedding (word-chunked section or caption)
-
----
-
-## Quick try (Question → Markdown)
-
-Smoke test multilingual behavior (English retrieval, non-English answer):
-
-```bash
-cd NASA_MSG/backend
-python -c "from rag.query_markdown import query_to_markdown; print(query_to_markdown('미세중력에서 골밀도 변화는?', include_sources=True, include_figures=False))"
-```
-
-Expected
-- QueryReformer generates English multi-queries/HyDE for retrieval
-- Final answer is in the question language (Korean in this example) with sentence-level PMC citations
 
 ---
 
@@ -122,7 +88,7 @@ If the model still replies in English
 3) Fuse
    - RRF across query runs → final top_k
 4) Figures
-   - Include figure-caption chunks and resolve "Figure N" via article.json
+  - Include figure-caption chunks and resolve "Figure N" via meta.jsonl
 5) Answer
    - Context-grounded, sentence-level PMC citations, response in user language
 
@@ -147,13 +113,3 @@ If the model still replies in English
 
 - `query_markdown.py`
   - Simple helper to get a Markdown string for demos/tests
-
----
-
-## Tips
-
-- Models: defaults are `text-embedding-3-small` and `gpt-4o-mini`; uses `OPENAI_API_KEY` from `.env`.
-- Performance: tune `--batch-size` for embeddings; includes simple retry logic.
-- Citations: only PMCIDs allowed. Do not fabricate. If unsupported → acknowledge uncertainty.
-- Figures: `figure_image_urls` can be rendered directly by the frontend.
-

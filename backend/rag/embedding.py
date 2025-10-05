@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Embedding builder (minimal)
+Embedding builder
 - Reads PMC articles from ./articles/{PMCID}/article.json
 - Builds text-only embeddings using OpenAI text-embedding-3-small
 - Saves FAISS index (cosine via L2 normalization) and metadata JSONL
@@ -76,9 +76,9 @@ def _word_chunks(text: str, chunk_size: int = 220, overlap: int = 40) -> List[st
 
 def load_corpus(articles_dir: str) -> List[Chunk]:
     """
-    - 섹션: Section.markdown을 워드 청킹
-    - 피겨: caption 텍스트를 1개 청크로 사용
-    - 이미지(URL/tileshop)는 메타데이터에만 저장(임베딩 미포함)
+    - Sections: word-chunk Section.markdown into embedding chunks
+    - Figures: use the caption text as a single chunk
+    - Images (URL/tileshop) are stored only in metadata (not embedded)
     """
     base = Path(articles_dir)
     chunks: List[Chunk] = []
@@ -114,7 +114,7 @@ def load_corpus(articles_dir: str) -> List[Chunk]:
                 continue
             label = (fig.get("label") or "").strip() or None
             tileshop = fig.get("tileshop") or None
-            # 새 크롤러는 images[].url, 과거 데이터는 images[].src 일 수 있어 둘 다 지원
+            # New crawler stores images[].url; some legacy data may use images[].src — support both
             image_urls = []
             for im in (fig.get("images") or []):
                 url = im.get("url") or im.get("src")
@@ -197,7 +197,7 @@ def build_index(articles_dir: str, out_dir: str, model: str, batch_size: int) ->
                 "figure_label": c.figure_label,
                 "figure_caption": c.figure_caption,
                 "figure_tileshop": c.figure_tileshop,
-                "figure_image_urls": c.figure_image_urls,  # UI에서 바로 표시 가능
+                "figure_image_urls": c.figure_image_urls,  # can be rendered directly by the UI
                 "text": c.text,
             }
             f.write(json.dumps(rec, ensure_ascii=False) + "\n")

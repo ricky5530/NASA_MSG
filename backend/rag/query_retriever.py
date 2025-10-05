@@ -7,6 +7,7 @@ LangChain BaseRetriever over existing FAISS index + meta.jsonl produced by rag/e
 - Loads metadata from data/index/meta.jsonl (one JSON per line)
 - Embeds queries with OpenAIEmbeddings (must match the model used for the index)
 - Uses cosine similarity via L2-normalized vectors
+ - Assumes stored embeddings were L2-normalized at index build time (see rag/embedding.py)
 
 Env:
   OPENAI_API_KEY
@@ -30,6 +31,7 @@ DEFAULT_EMBED = "text-embedding-3-small"
 
 
 def _read_meta(meta_path: Path) -> List[Dict[str, Any]]:
+    """Read meta.jsonl file (one JSON object per line) into a list of dicts."""
     items: List[Dict[str, Any]] = []
     with meta_path.open("r", encoding="utf-8") as f:
         for line in f:
@@ -41,6 +43,7 @@ def _read_meta(meta_path: Path) -> List[Dict[str, Any]]:
 
 
 def _l2_normalize(vec: np.ndarray) -> np.ndarray:
+    """Row-wise L2 normalize a 2D array to enable cosine similarity with inner product."""
     n = np.linalg.norm(vec, axis=1, keepdims=True) + 1e-12
     return (vec / n).astype("float32")
 
@@ -56,6 +59,9 @@ class FAISSJsonlStore:
         self.meta: List[Dict[str, Any]] = _read_meta(meta_path)
 
     def search(self, qvec: np.ndarray, top_k: int) -> Tuple[np.ndarray, np.ndarray]:
+        """Search the FAISS index with a single query vector.
+        Returns (D, I): distances and indices as 1D arrays for the top_k matches.
+        """
         D, I = self.index.search(qvec, top_k)
         return D[0], I[0]
 
@@ -81,7 +87,7 @@ class FAISSJsonlRetriever(BaseRetriever):
         embed_model: str = DEFAULT_EMBED,
         top_k: int = 5,
     ):
-        # Initialize pydantic fields via super().__init__
+        # Initialize Pydantic fields via super().__init__
         super().__init__(
             index_path=str(index_path),
             meta_path=str(meta_path),
@@ -105,7 +111,7 @@ class FAISSJsonlRetriever(BaseRetriever):
             meta["url"] = f"https://www.ncbi.nlm.nih.gov/pmc/articles/{pmcid}/"
         return Document(page_content=text, metadata=meta)
 
-    # In langchain-core, override the protected method
+    # Override BaseRetriever hook in LangChain Core
     def _get_relevant_documents(self, query: str) -> List[Document]:
         qvec = self._embed_query(query)
         _D, I = self._store.search(qvec, self.top_k)
@@ -118,7 +124,7 @@ class FAISSJsonlRetriever(BaseRetriever):
         return docs
 
     async def _aget_relevant_documents(self, query: str) -> List[Document]:
-        # Simple sync wrapper
+        # Simple sync wrapper (async signature for compatibility)
         return self._get_relevant_documents(query)
 
 
@@ -128,9 +134,9 @@ def reciprocal_rank_fusion(
     top_k: int = 8,
     doc_id_key: str = "id",
 ) -> List[Document]:
-    """
-    RRF fuse multiple ranked lists.
-    Identity of a Document is determined by metadata[doc_id_key] if present, else by (pmcid, chunk id).
+    """Fuse multiple ranked lists using Reciprocal Rank Fusion (RRF).
+    Document identity is determined by metadata[doc_id_key] when present,
+    otherwise by a composite key (pmcid, chunk id).
     """
     def doc_key(d: Document) -> str:
         meta = d.metadata or {}

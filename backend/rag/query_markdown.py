@@ -207,7 +207,7 @@ def _render_answer_md(question: str, answer: str, sources: List[Dict[str, Any]])
     parts.append(answer_linked.strip() + "\n")
     return "\n".join(parts)
 
-# build_markdown: run_query 결과를 받아 Markdown 1개 문자열로 조립
+# build_markdown: assemble a single Markdown string from the run_query result
 def build_markdown(
     question: str,
     result: Dict[str, Any],
@@ -218,7 +218,7 @@ def build_markdown(
     fig_caption_max_chars: int = 0,
 ) -> str:
     """
-    run_query -> Markdown return
+    Create Markdown output from a run_query result.
     """
     parts = []
 
@@ -266,8 +266,8 @@ def query_to_markdown(
     fig_caption_max_chars: int = 0,
 ) -> str:
     """
-    내부적으로 run_query를 실행하고, 그 결과를 Markdown 문자열로 반환합니다.
-    외부 서비스/엔드포인트에서 바로 import하여 사용 가능합니다.
+    Run the RAG pipeline (run_query) internally and return the result as a Markdown string.
+    This function is safe to import and use directly from external services/endpoints.
     """
 
     result = run_query(

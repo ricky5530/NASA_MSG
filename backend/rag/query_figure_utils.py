@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Figure utilities
-- Load article.json
+- Load figure metadata from meta.jsonl (built alongside FAISS index)
 - Build figure index by label tokens (e.g., '1', '2A', 'S1', '2-1')
 - Resolve "Figure N" / "Fig. N" references in text to tileshop/image URLs
 """
@@ -16,14 +16,15 @@ import re
 # Accepts: "Figure 1", "Fig. 2A", "Figure S1", "Figure 2-1"
 FIG_NUM_RE = re.compile(r'\b(?:Fig(?:ure)?\.?)\s+([0-9A-Za-z\-\u2013\u2014\.]+)', re.I)
 
-# meta.jsonl 경로를 스크립트 기준 절대경로로 계산
+# Compute absolute meta.jsonl path relative to this script
 BASE_DIR = Path(__file__).resolve().parents[1]
 META_PATH = BASE_DIR / "data" / "index" / "meta.jsonl"
 
 @lru_cache(maxsize=1)
 def _load_meta_fig_index(meta_path_str: str) -> Dict[str, List[Dict[str, Any]]]:
     """
-    meta.jsonl을 1회 스캔하여 pmcid -> [figure_objs] 매핑을 생성/캐시.
+    Scan meta.jsonl once and cache a mapping: pmcid -> [figure_objs].
+    Each figure_obj contains {id, label, caption, tileshop, images[]}.
     """
     meta_path = Path(meta_path_str)
     out: Dict[str, List[Dict[str, Any]]] = {}
@@ -64,6 +65,8 @@ def _load_meta_fig_index(meta_path_str: str) -> Dict[str, List[Dict[str, Any]]]:
     return out
 
 def load_article_json(pmcid: str) -> Dict[str, Any]:
+    # Compatibility shim: return a minimal article-like object with figures only,
+    # sourced from meta.jsonl rather than per-article article.json.
     figs = _load_meta_fig_index(str(META_PATH)).get(pmcid) or []
     return {"figures": figs} if figs else {}
 

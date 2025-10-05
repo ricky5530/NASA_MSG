@@ -1,24 +1,28 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-PMC HTML 전용 크롤러/파서 + CSV 배치 실행
-- 이미지는 다운로드하지 않고 URL만 저장
-- 단일 입력: PMC HTML URL 또는 로컬 html 파일 경로
-- CSV 배치: data/raw/SB_publication_PMC.csv (기본 헤더: Title,Link)
+PMC HTML-only crawler/parser + CSV batch runner
+- Does NOT download images; stores image URLs only
+- Single input: PMC HTML URL or local HTML file path
+- CSV batch: data/raw/SB_publication_PMC.csv (headers: Title,Link)
 
-출력:
-  - {out_dir}/{PMCID}/article.md
-  - {out_dir}/{PMCID}/article.json (이미지 URL 포함)
+Outputs:
+    - {out_dir}/{PMCID}/article.md
+    - {out_dir}/{PMCID}/article.json (includes image URLs)
 
-예시:
-  # CSV 상위 10개만, 이미 처리된 항목은 건너뛰기
-  python scripts/crawl_pmc.py --csv data/raw/SB_publication_PMC.csv --limit 10 --resume --out articles
+Notes:
+- This script writes to an "articles" directory by default (via --out). 
+- The folder is created at runtime and is typically not committed to git.
 
-  # 단일 URL
-  python scripts/crawl_pmc.py "https://pmc.ncbi.nlm.nih.gov/articles/PMC2824534/" --out articles
+Examples (run from backend/):
+    # Process only top 10 rows from CSV; skip already-processed items
+    python rag/crawl_pmc.py --csv data/raw/SB_publication_PMC.csv --limit 10 --resume --out articles
 
-필수 패키지:
-  pip install -U beautifulsoup4 lxml requests
+    # Single URL
+    python rag/crawl_pmc.py "https://pmc.ncbi.nlm.nih.gov/articles/PMC2824534/" --out articles
+
+Required packages:
+    pip install -U beautifulsoup4 lxml requests
 """
 import argparse
 import csv
@@ -43,8 +47,8 @@ PMCID_RE = re.compile(r"/articles/(PMC\d+)/", re.I)
 
 @dataclass
 class FigureImage:
-    url: str          # 이미지 URL (다운로드 안 함)
-    filename: str     # 추론된 파일명
+    url: str          # Image URL (we do not download files)
+    filename: str     # Inferred filename used in metadata/markdown
 
 @dataclass
 class Figure:
@@ -74,7 +78,7 @@ class ArticleData:
     figures: List[Figure]
 
 def fetch_html(input_path_or_url: str) -> Tuple[str, str]:
-    """Return (html_text, source_url_or_path)"""
+    """Return (html_text, source_url_or_path). Uses a browser-like User-Agent and up to 3 retries for URLs."""
     if input_path_or_url.startswith("http://") or input_path_or_url.startswith("https://"):
         session = requests.Session()
         session.headers.update({"User-Agent": UA, "Accept": "text/html, */*"})
@@ -116,7 +120,7 @@ def infer_pmcid(soup: BeautifulSoup) -> Optional[str]:
         m = PMCID_RE.search(link["href"])
         if m:
             return m.group(1)
-    # 2) data-article-id 속성
+    # 2) data-article-id attribute
     cont = soup.find(attrs={"data-article-id": True})
     if cont:
         return f"PMC{cont['data-article-id']}"
@@ -142,9 +146,9 @@ def extract_meta(soup: BeautifulSoup) -> dict:
 
 def to_markdown_from_nodes(nodes: List[Tag], include_headings: bool = False) -> str:
     """
-    아주 단순한 HTML → MD 변환.
-    - 기본값으로 섹션 헤더(h1~h6)는 제외(include_headings=False).
-      (헤더 출력은 render_markdown()에서 일괄 처리)
+    Minimal HTML → Markdown conversion.
+    - By default, section headings (h1~h6) are excluded (include_headings=False).
+      Headings are centrally rendered in render_markdown().
     """
     out: List[str] = []
     for node in nodes:
@@ -207,7 +211,7 @@ def extract_sections(soup: BeautifulSoup) -> List[Section]:
     return sections
 
 def extract_figures(soup: BeautifulSoup, base_url: str) -> List[Figure]:
-    """이미지는 다운로드하지 않고 URL만 저장"""
+    """Collect figure metadata; do not download images (store URLs only)."""
     figures: List[Figure] = []
     for fig in soup.select("section.body.main-article-body figure.fig"):
         fig_id = fig.get("id") or ""
@@ -222,10 +226,10 @@ def extract_figures(soup: BeautifulSoup, base_url: str) -> List[Figure]:
             if not src:
                 continue
             
-            # 상대 URL을 절대 URL로 변환
+            # Convert relative URL to absolute
             full_url = urljoin(base_url, src)
             
-            # Figure 번호 추출
+            # Extract figure number (if present) for readable filenames
             fig_num = "X"
             m = FIG_NUM_RE.search(label or "")
             if m:
@@ -243,7 +247,7 @@ def extract_figures(soup: BeautifulSoup, base_url: str) -> List[Figure]:
     return figures
 
 def render_markdown(article: ArticleData) -> str:
-    """이미지는 URL로만 표시"""
+    """Render a simple Markdown document. Images are referenced by URL only."""
     lines: List[str] = []
     lines.append(f"# {article.title}")
     meta_line = []
@@ -283,7 +287,7 @@ def render_markdown(article: ArticleData) -> str:
                 lines.append(fig.caption)
             for img in fig.images:
                 lines.append("")
-                lines.append(f"![{title}]({img.url})")  # URL 직접 사용
+                lines.append(f"![{title}]({img.url})")  # Use URL directly (no download)
             if fig.tileshop:
                 lines.append("")
                 lines.append(f"- Tileshop: {fig.tileshop}")
@@ -292,7 +296,7 @@ def render_markdown(article: ArticleData) -> str:
 
 def crawl_one(input_path_or_url: str, out_root: Path) -> Tuple[bool, Optional[str], str]:
     """
-    단일 URL/로컬 HTML을 크롤링하여 out_root/PMCID/* 로 저장
+    Crawl a single URL or local HTML file and save under out_root/PMCID/*.
     Returns: (success, pmcid, message)
     """
     try:
@@ -304,7 +308,7 @@ def crawl_one(input_path_or_url: str, out_root: Path) -> Tuple[bool, Optional[st
         target_root = out_root / pmcid
 
         sections = extract_sections(soup)
-        figures = extract_figures(soup, source_url)  # base_url 전달
+        figures = extract_figures(soup, source_url)  # pass base_url for resolving relative image URLs
 
         article = ArticleData(
             title=meta.get("title") or "Untitled",
@@ -323,7 +327,7 @@ def crawl_one(input_path_or_url: str, out_root: Path) -> Tuple[bool, Optional[st
         md = render_markdown(article)
         (target_root / "article.md").write_text(md, encoding="utf-8")
 
-        # JSON 저장 (이미지 URL 포함)
+        # Save JSON (includes image URLs)
         json_obj = asdict(article)
         json_obj["sections"] = [asdict(s) for s in article.sections]
         json_obj["figures"] = [
@@ -344,8 +348,8 @@ def crawl_one(input_path_or_url: str, out_root: Path) -> Tuple[bool, Optional[st
 
 def iter_csv_links(csv_path: Path, limit: int = 0) -> Iterable[str]:
     """
-    CSV 헤더: Title,Link
-    limit > 0 이면 상단부터 limit개 반환
+    Iterate links from a CSV with headers: Title,Link.
+    If limit > 0, yield only the first N rows.
     """
     count = 0
     with csv_path.open("r", encoding="utf-8") as f:
@@ -375,7 +379,7 @@ def main():
     out_root = Path(args.out).resolve()
     out_root.mkdir(parents=True, exist_ok=True)
 
-    # CSV 배치 모드
+    # CSV batch mode
     if args.csv:
         csv_path = Path(args.csv).resolve()
         if not csv_path.exists():
@@ -386,7 +390,7 @@ def main():
         ok = 0
         start = time.time()
         for idx, url in enumerate(iter_csv_links(csv_path, limit=args.limit), 1):
-            # resume 스킵 판단(가능하면 URL에서 PMCID 추정)
+            # If --resume is set, try to infer PMCID from URL and skip if already saved
             if args.resume:
                 pmcid_guess = pmcid_from_url(url)
                 if pmcid_guess:
@@ -406,7 +410,7 @@ def main():
         print(f"[done] total={total} ok={ok} fail={total-ok} elapsed={dur:.1f}s out={out_root}")
         sys.exit(0)
 
-    # 단일 실행 모드
+    # Single-run mode
     if not args.input:
         print("[error] Provide either a single input or --csv path", file=sys.stderr)
         sys.exit(2)
