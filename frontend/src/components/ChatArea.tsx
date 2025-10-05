@@ -47,7 +47,7 @@ export default function ChatArea({ onMessageSent, serverConnected = false }: Cha
       id: "1",
       content: "안녕하세요! 저는 MARS – Mission for Astrobiology and Research Support입니다. 미세중력 실험, 우주 환경에서의 생명체 연구, 우주 생물학 데이터에 대해 궁금한 것이 있으면 언제든 질문해주세요!",
       sender: "assistant",
-      timestamp: "오전 10:30"
+      timestamp: new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: true })
     }
   ]);
   
@@ -74,7 +74,7 @@ export default function ChatArea({ onMessageSent, serverConnected = false }: Cha
         id: "1",
         content: "안녕하세요! 저는 MARS – Mission for Astrobiology and Research Support입니다. 미세중력 실험, 우주 환경에서의 생명체 연구, 우주 생물학 데이터에 대해 궁금한 것이 있으면 언제든 질문해주세요!",
         sender: "assistant",
-        timestamp: "오전 10:30"
+        timestamp: new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: true })
       };
       
       const loadedMessages = conversationData.messages.map((msg: any) => ({
@@ -246,7 +246,7 @@ export default function ChatArea({ onMessageSent, serverConnected = false }: Cha
   return (
     <div className="h-full flex flex-col bg-white">
       <div className="flex-1 p-4 overflow-y-auto" ref={chatListRef}>
-        <div className="space-y-4 max-w-6xl mx-auto pt-16">
+        <div className="space-y-4 max-w-6xl mx-auto pt-24">
           {messages.map((message: Message, index) => (
             <div
               key={`${message.id}-${index}`}

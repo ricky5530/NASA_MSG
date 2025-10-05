@@ -215,7 +215,7 @@ export default function Dashboard() {
               <h3 className="text-base font-medium text-gray-600">지원 언어</h3>
               <Globe className="w-6 h-6 text-indigo-500" />
             </div>
-            <p className="text-4xl font-bold text-gray-800">{summary?.languages.length || 0}</p>
+            <p className="text-4xl font-bold text-gray-800">15+</p>
             <p className="text-sm text-gray-500 mt-2">다국어 대응</p>
           </div>
         </div>
