@@ -289,11 +289,11 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* 최근 활동 로그 */}
+        {/* 글로벌 커뮤니티 */}
         <div className="bg-white rounded-lg shadow-sm p-8 border border-gray-200">
           <h3 className="text-xl font-semibold text-gray-800 mb-5 flex items-center gap-2">
             <Activity className="w-6 h-6 text-purple-500" />
-            최근 활동 ({activity.length})
+            글로벌 연구 동향 ({activity.length})
           </h3>
           <div className="space-y-3 max-h-96 overflow-y-auto">
             {activity.map((item, idx) => {
@@ -330,7 +330,7 @@ export default function Dashboard() {
             
             {activity.length === 0 && (
               <div className="text-center py-8 text-gray-500 text-base">
-                아직 활동 기록이 없습니다
+                아직 연구 질문이 없습니다
               </div>
             )}
           </div>

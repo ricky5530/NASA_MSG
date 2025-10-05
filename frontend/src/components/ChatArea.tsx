@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, memo } from "react";
-import { Send, Bot, User, Loader2 } from "lucide-react";
+import { Send, User, Loader2 } from "lucide-react";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { ragMarkdown } from "../config/api";
@@ -254,11 +254,15 @@ export default function ChatArea({ onMessageSent, serverConnected = false }: Cha
               }`}
             >
               {message.sender === "assistant" && (
-                <div className="flex-shrink-0 w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center mt-1">
                   {message.loading ? (
-                    <Loader2 className="w-5 h-5 text-white animate-spin" />
+                    <Loader2 className="w-4 h-4 text-white animate-spin" />
                   ) : (
-                    <Bot className="w-5 h-5 text-white" />
+                    <div className="w-5 h-5 rounded-full bg-red-600 relative">
+                      <div className="absolute w-1 h-1 bg-red-800 rounded-full top-1.5 left-1"></div>
+                      <div className="absolute w-1.5 h-1.5 bg-red-800 rounded-full top-1 right-1"></div>
+                      <div className="absolute w-1 h-1 bg-red-800 rounded-full bottom-1.5 left-1.5"></div>
+                    </div>
                   )}
                 </div>
               )}
