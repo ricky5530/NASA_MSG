@@ -19,7 +19,7 @@ DEFAULT_CHAT_MODEL =  "gpt-4o-mini"
 
 @dataclass
 class ReformedQueries:
-    rule_expanded: List[str]          # kept for compatibility; will be []
+    rule_expanded: List[str]
     llm_generated: List[str]
     hyde_document: Optional[str]
 
@@ -37,6 +37,7 @@ class QueryReformer:
                 "- Scientific synonyms, related pathways, and organism/model variants\n"
                 "- Outcomes/phenotypes, exposure context (microgravity, radiation), and mission terms (ISS)\n"
                 "- Keep each query < 16 words. Do NOT number them. One per line.\n\n"
+                "- IMPORTANT: Return all queries in English regardless of the question language.\n\n" # multiquery english only
                 "Question: {question}\n"
                 "Queries:"
             ),
@@ -48,6 +49,7 @@ class QueryReformer:
                 "Write a short factual abstract (120-200 words) that could appear in a NASA bioscience paper, "
                 "summarizing likely findings that directly address the question below. "
                 "Focus on RESULTS-like content and technical terms, avoid speculation.\n\n"
+                "Write the abstract in English regardless of the question language.\n\n" # hyde english only
                 "Question: {question}\n\n"
                 "Abstract:"
             ),
