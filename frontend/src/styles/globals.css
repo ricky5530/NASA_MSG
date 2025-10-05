@@ -266,3 +266,28 @@
 html {
   font-size: var(--font-size);
 }
+
+/* 사이드바 스크롤바 커스터마이징 */
+.sidebar-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sidebar-scrollbar::-webkit-scrollbar-track {
+  background: #374151; /* gray-700 - 사이드바와 어울리는 어두운 배경 */
+  border-radius: 4px;
+}
+
+.sidebar-scrollbar::-webkit-scrollbar-thumb {
+  background: #6B7280; /* gray-500 - 좀 더 밝은 회색 */
+  border-radius: 4px;
+}
+
+.sidebar-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #9CA3AF; /* gray-400 - 호버 시 더 밝게 */
+}
+
+/* Firefox용 스크롤바 스타일 */
+.sidebar-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #6B7280 #374151;
+}
