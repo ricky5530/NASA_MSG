@@ -246,7 +246,7 @@ export default function ChatArea({ onMessageSent, serverConnected = false }: Cha
   return (
     <div className="h-full flex flex-col bg-white">
       <div className="flex-1 p-4 overflow-y-auto" ref={chatListRef}>
-        <div className="space-y-4 max-w-6xl mx-auto">
+        <div className="space-y-4 max-w-6xl mx-auto pt-16">
           {messages.map((message: Message, index) => (
             <div
               key={`${message.id}-${index}`}
@@ -344,7 +344,7 @@ export default function ChatArea({ onMessageSent, serverConnected = false }: Cha
             value={inputMessage}
             onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setInputMessage(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="우주 생물학에 대해 질문해보세요..."
+            placeholder="MARS에게 물어보기..."
             className="flex-1 bg-white border border-gray-300 rounded px-4 py-3 shadow-sm focus:border-blue-500 focus:ring-blue-500 resize-none min-h-[48px] max-h-[120px] overflow-y-auto text-base"
             disabled={isLoading}
             style={{ minHeight: '48px', maxHeight: '120px' }}
