@@ -352,7 +352,7 @@ export default function ChatArea({ onMessageSent, serverConnected = false }: Cha
           <button
             onClick={sendMessage}
             disabled={!inputMessage.trim() || isLoading}
-            className="absolute right-2 bottom-2 bg-blue-500 hover:bg-blue-600 text-white disabled:bg-gray-400 p-2 rounded-lg flex-shrink-0 transition-colors"
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-500 hover:bg-blue-600 text-white disabled:bg-gray-400 p-2 rounded-lg flex-shrink-0 transition-colors"
           >
             {isLoading ? (
               <Loader2 className="w-5 h-5 animate-spin" />
