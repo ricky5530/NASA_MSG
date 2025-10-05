@@ -1,28 +1,23 @@
-"""
-NASA 우주 생물학 챗봇 백엔드 - 실제 논문 학습 시스템
-"""
+import logging
+import os
+import re
+import schedule
+import sys
+import threading
+import time
 
+from collections import deque, Counter
+from contextlib import asynccontextmanager
+from datetime import datetime, timezone
+from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Request, Body, Response
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-import os
-from datetime import datetime, timezone
-import logging
-from dotenv import load_dotenv
-import re
-from collections import deque, Counter
-import time
-from contextlib import asynccontextmanager
 from pathlib import Path
-import threading
-import schedule
 
 # .env 파일 로드 (현재 디렉토리에서)
 load_dotenv('.env')  # backend/.env 파일 로드
 
 # 서비스 임포트 - 절대 임포트로 변경 (Render 배포 호환)
-import sys
-import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 # 데이터베이스 임포트
@@ -120,8 +115,6 @@ def detect_language_heuristic(text: str) -> str:
         return "arabic"
     return "english"
 
-
-
 # =========================
 # In-memory Dashboard State
 # =========================
@@ -139,9 +132,9 @@ DASHBOARD = {
 app = FastAPI(lifespan=lifespan)
 
 # 앱 메타데이터 추가
-app.title = "NASA Space Biology Chatbot API"
-app.description = "실제 논문 학습 기반 우주 생물학 챗봇"
-app.version = "2.0.0"
+app.title = "MARS - Mission for Astrobiology and Research Support"
+app.description = "NASA Space Apps Challenge - MSG"
+app.version = "1.0.0"
 
 # CORS 설정
 app.add_middleware(
@@ -402,7 +395,6 @@ async def general_exception_handler(request: Request, exc: Exception):
             "Access-Control-Allow-Credentials": "true",
         }
     )
-
 
 if __name__ == "__main__":
     import os, sys
