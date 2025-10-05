@@ -194,10 +194,6 @@ For deployment to other platforms:
    npm run type-check
    ```
 
-## License
-
-This project is distributed under the MIT License.
-
 ## Team Information
 
 **Team MSG** - NASA Astrobiology Data-based AI Chatbot Development Team

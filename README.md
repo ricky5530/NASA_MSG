@@ -4,7 +4,6 @@ MARS is a specialized AI chatbot service powered by NASA's astrobiology research
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-nasamsg.vercel.app-blue?style=for-the-badge&logo=vercel)](https://nasamsg.vercel.app/)
 [![Backend](https://img.shields.io/badge/Backend-Render-green?style=for-the-badge&logo=render)](https://nasa-msg.onrender.com)
-[![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](LICENSE)
 
 ## Project Overview
 
@@ -183,10 +182,6 @@ We welcome ideas for new features.
 3. Commit your changes (`git commit -m 'Add amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
-
-## License
-
-This project is distributed under the [MIT License](LICENSE).
 
 ## Team
 
