@@ -243,10 +243,6 @@ async def dashboard_summary():
     top_lang = sorted(DASHBOARD["lang_counter"].items(), key=lambda x: x[1], reverse=True)[:5]
     top_topic = sorted(DASHBOARD["topic_counter"].items(), key=lambda x: x[1], reverse=True)[:5]
 
-    # 간단한 사용자 통계 (데이터베이스 없이)
-    db_total_users = 1  # 기본값
-    db_active_users = 1  # 기본값
-
     return {
         "started_at": DASHBOARD["started_at"],
         "messages_total": DASHBOARD["messages_total"],
@@ -254,8 +250,6 @@ async def dashboard_summary():
         "avg_latency_ms": avg_latency,
         "languages": [{"name": k, "count": v} for k, v in top_lang],
         "topics": [{"name": k, "count": v} for k, v in top_topic],
-        "db_total_users": db_total_users,
-        "db_active_users": db_active_users,
     }
 
 @app.get("/dashboard/activity")

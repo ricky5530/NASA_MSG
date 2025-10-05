@@ -10,7 +10,6 @@ import {
   ChevronLeft,
   ChevronRight,
   Trash2,
-  Users,
   Plus
 } from "lucide-react";
 import { API_CONFIG } from "../config/api";
@@ -33,8 +32,6 @@ interface DashboardSummary {
   avg_latency_ms: number | null;
   languages: { name: string; count: number }[];
   topics: { name: string; count: number }[];
-  db_total_users?: number;
-  db_active_users?: number;
 }
 
 export default function Sidebar({ currentView, onViewChange }: SidebarProps) {
@@ -112,9 +109,6 @@ export default function Sidebar({ currentView, onViewChange }: SidebarProps) {
     return emojiMap[lang] || '🌐';
   };
 
-  const totalUsers = dashboardData?.db_total_users || 0;
-  const activeUsers = dashboardData?.db_active_users || 0;
-
   if (isCollapsed) {
     return (
       <div className="w-16 bg-gray-900 text-white flex flex-col items-center py-4 gap-4">
@@ -188,26 +182,6 @@ export default function Sidebar({ currentView, onViewChange }: SidebarProps) {
           대시보드
         </button>
       </div>
-
-      {/* 사용자 통계 (DB) */}
-      {totalUsers > 0 && (
-        <div className="px-4 pb-3 border-b border-gray-700 flex-shrink-0">
-          <h3 className="text-xs font-semibold text-gray-400 mb-2 flex items-center gap-2">
-            <Users className="w-3 h-3" />
-            사용자 통계
-          </h3>
-          <div className="grid grid-cols-2 gap-2">
-            <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded p-2">
-              <div className="text-xs text-blue-100">전체 사용자</div>
-              <div className="text-xl font-bold">{totalUsers}</div>
-            </div>
-            <div className="bg-gradient-to-br from-green-600 to-green-700 rounded p-2">
-              <div className="text-xs text-green-100">활성 사용자</div>
-              <div className="text-xl font-bold">{activeUsers}</div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* 대시보드 요약 */}
       <div className="px-4 pb-3 border-b border-gray-700 flex-shrink-0">
@@ -325,12 +299,6 @@ export default function Sidebar({ currentView, onViewChange }: SidebarProps) {
       <div className="p-4 border-t border-gray-700 flex-shrink-0">
         <div className="text-xs text-gray-500 text-center">
           🚀 NASA Space Biology AI
-          {totalUsers > 0 && (
-            <div className="mt-1 flex items-center justify-center gap-1 text-blue-400">
-              <Users className="w-3 h-3" />
-              <span>{totalUsers}명 사용 중</span>
-            </div>
-          )}
         </div>
       </div>
     </div>

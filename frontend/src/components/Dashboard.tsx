@@ -17,8 +17,6 @@ interface DashboardSummary {
   avg_latency_ms: number | null;
   languages: { name: string; count: number }[];
   topics: { name: string; count: number }[];
-  db_total_users: number;
-  db_active_users: number;
 }
 
 interface RecentActivity {
@@ -183,24 +181,6 @@ export default function Dashboard() {
 
         {/* 주요 지표 카드 */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-          <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-sm font-medium text-gray-600">전체 사용자</h3>
-              <Activity className="w-5 h-5 text-blue-500" />
-            </div>
-            <p className="text-3xl font-bold text-gray-800">{summary?.db_total_users || 0}</p>
-            <p className="text-xs text-gray-500 mt-1">누적 가입자 수</p>
-          </div>
-
-          <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-sm font-medium text-gray-600">활성 사용자</h3>
-              <TrendingUp className="w-5 h-5 text-green-500" />
-            </div>
-            <p className="text-3xl font-bold text-gray-800">{summary?.db_active_users || 0}</p>
-            <p className="text-xs text-gray-500 mt-1">최근 1시간 활동</p>
-          </div>
-
           <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-sm font-medium text-gray-600">전체 메시지</h3>
