@@ -13,6 +13,7 @@ numpy<2.0.0
 lxml>=4.9.0
 html5lib>=1.1
 sqlalchemy>=2.0.0
+schedule>=1.2.0
 
 # RAG System Dependencies
 # Pin FAISS to the version used when the index was built to avoid binary incompatibility

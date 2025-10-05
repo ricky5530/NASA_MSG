@@ -273,7 +273,77 @@ def get_conversation_history(db, conversation_id: str) -> dict:
     }
 
 
+def cleanup_old_data(hours_to_keep: int = 24):
+    """오래된 데이터를 정리하여 데이터베이스 크기 관리"""
+    from datetime import datetime, timedelta
+    
+    db = SessionLocal()
+    try:
+        cutoff_time = datetime.utcnow() - timedelta(hours=hours_to_keep)
+        
+        # 오래된 메시지 삭제
+        old_messages = db.query(Message).filter(Message.timestamp < cutoff_time)
+        deleted_messages = old_messages.count()
+        old_messages.delete()
+        
+        # 메시지가 없는 대화 삭제
+        empty_conversations = db.query(Conversation).filter(
+            ~Conversation.conversation_id.in_(
+                db.query(Message.conversation_id).distinct()
+            )
+        )
+        deleted_conversations = empty_conversations.count()
+        empty_conversations.delete()
+        
+        # 대화가 없는 사용자 삭제
+        empty_users = db.query(User).filter(
+            ~User.user_id.in_(
+                db.query(Conversation.user_id).distinct()
+            )
+        )
+        deleted_users = empty_users.count()
+        empty_users.delete()
+        
+        db.commit()
+        
+        print(f"데이터 정리 완료: 메시지 {deleted_messages}개, 대화 {deleted_conversations}개, 사용자 {deleted_users}개 삭제")
+        return {
+            "deleted_messages": deleted_messages,
+            "deleted_conversations": deleted_conversations,
+            "deleted_users": deleted_users
+        }
+        
+    except Exception as e:
+        db.rollback()
+        print(f"데이터 정리 중 오류: {e}")
+        raise e
+    finally:
+        db.close()
+
+
+def get_database_size():
+    """데이터베이스 크기 확인 (MB 단위)"""
+    try:
+        size_bytes = DB_PATH.stat().st_size
+        size_mb = size_bytes / (1024 * 1024)
+        return round(size_mb, 2)
+    except FileNotFoundError:
+        return 0
+
+
+def vacuum_database():
+    """데이터베이스 VACUUM 실행으로 공간 재확보"""
+    try:
+        db = SessionLocal()
+        db.execute("VACUUM")
+        db.close()
+        print("데이터베이스 VACUUM 완료")
+    except Exception as e:
+        print(f"VACUUM 중 오류: {e}")
+
+
 # 앱 시작 시 자동 실행
 if __name__ == "__main__":
     init_db()
     print("데이터베이스 테이블이 생성되었습니다.")
+    print(f"현재 데이터베이스 크기: {get_database_size()}MB")

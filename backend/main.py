@@ -14,6 +14,8 @@ from collections import deque, Counter
 import time
 from contextlib import asynccontextmanager
 from pathlib import Path
+import threading
+import schedule
 
 # .env 파일 로드 (현재 디렉토리에서)
 load_dotenv('.env')  # backend/.env 파일 로드
@@ -22,6 +24,9 @@ load_dotenv('.env')  # backend/.env 파일 로드
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+# 데이터베이스 임포트
+from database import cleanup_old_data, get_database_size, vacuum_database
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -32,9 +37,65 @@ ROOT_DIR = BASE_DIR.parent
 INDEX_PATH = BASE_DIR / "data" / "index" / "faiss.index"
 META_PATH = BASE_DIR / "data" / "index" / "meta.jsonl"
 
+# 데이터베이스 정리 스케줄러
+def run_database_cleanup():
+    """데이터베이스 정리 작업 실행"""
+    try:
+        logger.info("📊 데이터베이스 정리 시작...")
+        
+        # 현재 크기 확인
+        current_size = get_database_size()
+        logger.info(f"정리 전 데이터베이스 크기: {current_size}MB")
+        
+        # 24시간 이상 된 데이터 정리
+        result = cleanup_old_data(hours_to_keep=24)
+        
+        # VACUUM으로 공간 재확보
+        vacuum_database()
+        
+        # 정리 후 크기 확인
+        new_size = get_database_size()
+        saved_space = current_size - new_size
+        
+        logger.info(f"정리 완료! 크기: {new_size}MB (절약: {saved_space:.2f}MB)")
+        logger.info(f"삭제된 항목: 메시지 {result['deleted_messages']}개, 대화 {result['deleted_conversations']}개, 사용자 {result['deleted_users']}개")
+        
+    except Exception as e:
+        logger.error(f"데이터베이스 정리 중 오류: {e}")
+
+def setup_scheduler():
+    """스케줄러 설정 및 시작"""
+    # 매일 오전 3시에 정리 실행
+    schedule.every().day.at("03:00").do(run_database_cleanup)
+    
+    # 12시간마다 정리 (더 자주)
+    schedule.every(12).hours.do(run_database_cleanup)
+    
+    def run_scheduler():
+        while True:
+            schedule.run_pending()
+            time.sleep(60)  # 1분마다 체크
+    
+    # 백그라운드 스레드에서 스케줄러 실행
+    scheduler_thread = threading.Thread(target=run_scheduler, daemon=True)
+    scheduler_thread.start()
+    logger.info("⏰ 데이터베이스 정리 스케줄러 시작됨 (12시간마다)")
+
 @asynccontextmanager
 async def lifespan(app):
     logger.info("🌟 Lifespan 시작!")
+    
+    # 초기 데이터베이스 크기 확인
+    initial_size = get_database_size()
+    logger.info(f"현재 데이터베이스 크기: {initial_size}MB")
+    
+    # 스케줄러 시작
+    setup_scheduler()
+    
+    # 시작 시 한 번 정리 (크기가 10MB 이상인 경우)
+    if initial_size > 10:
+        logger.info("큰 데이터베이스 감지, 초기 정리 실행...")
+        run_database_cleanup()
 
     try:
         yield
@@ -270,6 +331,44 @@ async def dashboard_activity():
 @app.get("/health")
 async def health():
     return {"ok": True}
+
+@app.get("/admin/database/status")
+async def database_status():
+    """데이터베이스 상태 확인 (관리자용)"""
+    try:
+        size_mb = get_database_size()
+        
+        # 데이터베이스 연결로 간단한 쿼리 실행
+        from database import SessionLocal, Message, Conversation, User
+        db = SessionLocal()
+        try:
+            message_count = db.query(Message).count()
+            conversation_count = db.query(Conversation).count()
+            user_count = db.query(User).count()
+        finally:
+            db.close()
+        
+        return {
+            "database_size_mb": size_mb,
+            "message_count": message_count,
+            "conversation_count": conversation_count,
+            "user_count": user_count,
+            "status": "healthy" if size_mb < 50 else "warning" if size_mb < 100 else "critical"
+        }
+    except Exception as e:
+        return {
+            "error": str(e),
+            "status": "error"
+        }
+
+@app.post("/admin/database/cleanup")
+async def manual_cleanup():
+    """수동 데이터베이스 정리 (관리자용)"""
+    try:
+        run_database_cleanup()
+        return {"message": "데이터베이스 정리 완료"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"정리 실패: {str(e)}")
 
 
 # === 예외 처리 핸들러 (CORS 헤더 포함) ===
