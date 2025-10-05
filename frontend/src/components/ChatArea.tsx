@@ -245,7 +245,7 @@ export default function ChatArea({ onMessageSent, serverConnected = false }: Cha
   return (
     <div className="h-full flex flex-col bg-white">
       <div className="flex-1 px-4 py-4 overflow-y-auto" ref={chatListRef}>
-        <div className="space-y-4 max-w-4xl mx-auto pt-24">
+        <div className="space-y-8 max-w-4xl mx-auto pt-24">
           {messages.map((message: Message, index) => (
             <div
               key={`${message.id}-${index}`}
