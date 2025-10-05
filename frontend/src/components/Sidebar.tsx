@@ -83,12 +83,15 @@ export default function Sidebar({ currentView, onViewChange }: SidebarProps) {
   };
 
   const loadConversation = (conv: ConversationHistory) => {
-    // ChatArea의 loadConversation 함수 호출
-    if ((window as any).loadChatConversation) {
+    // 먼저 채팅 뷰로 전환합니다.
+    onViewChange('chat');
+
+    // ChatArea 컴포넌트가 렌더링될 시간을 준 후, 전역 함수를 호출합니다.
+    // 이렇게 하면 대시보드 뷰에서도 채팅 불러오기가 정상적으로 동작합니다.
+    setTimeout(() => {
+      if (!(window as any).loadChatConversation) return;
       (window as any).loadChatConversation(conv);
-      // 채팅 뷰로 전환
-      onViewChange('chat');
-    }
+    }, 0);
   };
 
   const startNewConversation = () => {

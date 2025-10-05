@@ -44,3 +44,4 @@ env/
 # 기타 도구
 .DS_Store
 Thumbs.db
+.vercel
