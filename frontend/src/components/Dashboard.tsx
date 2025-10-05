@@ -161,7 +161,7 @@ export default function Dashboard() {
           <div>
             <h1 className="text-3xl font-bold text-gray-800 flex items-center gap-3">
               <BarChart3 className="w-8 h-8 text-blue-500" />
-              NASA 챗봇 대시보드
+              MARS 대시보드
             </h1>
             <p className="text-gray-600 mt-1">실시간 사용 통계 및 분석</p>
           </div>

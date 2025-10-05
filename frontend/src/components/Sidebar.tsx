@@ -147,7 +147,7 @@ export default function Sidebar({ currentView, onViewChange }: SidebarProps) {
     <div className="w-80 bg-gray-900 text-white flex flex-col h-full overflow-hidden">
       {/* 헤더 */}
       <div className="p-4 border-b border-gray-700 flex items-center justify-between flex-shrink-0">
-        <h2 className="text-lg font-bold">NASA AI 챗봇</h2>
+        <h2 className="text-lg font-bold">MARS</h2>
         <button
           onClick={() => setIsCollapsed(true)}
           className="p-1 hover:bg-gray-800 rounded transition-colors"
@@ -298,7 +298,7 @@ export default function Sidebar({ currentView, onViewChange }: SidebarProps) {
       {/* 푸터 */}
       <div className="p-4 border-t border-gray-700 flex-shrink-0">
         <div className="text-xs text-gray-500 text-center">
-          🚀 NASA Space Biology AI
+          MARS
         </div>
       </div>
     </div>

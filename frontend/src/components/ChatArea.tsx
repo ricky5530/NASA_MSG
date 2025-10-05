@@ -45,7 +45,7 @@ export default function ChatArea({ onMessageSent, serverConnected = false }: Cha
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
-      content: "안녕하세요! 🚀 저는 NASA 우주 생물학 전문 AI입니다. 미세중력 실험, 우주 환경에서의 생명체 연구, 우주 생물학 데이터에 대해 궁금한 것이 있으면 언제든 질문해주세요!",
+      content: "안녕하세요! 저는 MARS – Mission for Astrobiology and Research Support입니다. 미세중력 실험, 우주 환경에서의 생명체 연구, 우주 생물학 데이터에 대해 궁금한 것이 있으면 언제든 질문해주세요!",
       sender: "assistant",
       timestamp: "오전 10:30"
     }
@@ -72,7 +72,7 @@ export default function ChatArea({ onMessageSent, serverConnected = false }: Cha
       // 초기 환영 메시지 + 불러온 메시지
       const welcomeMessage: Message = {
         id: "1",
-        content: "안녕하세요! 🚀 저는 NASA 우주 생물학 전문 AI입니다. 미세중력 실험, 우주 환경에서의 생명체 연구, 우주 생물학 데이터에 대해 궁금한 것이 있으면 언제든 질문해주세요!",
+        content: "안녕하세요! 저는 MARS – Mission for Astrobiology and Research Support입니다. 미세중력 실험, 우주 환경에서의 생명체 연구, 우주 생물학 데이터에 대해 궁금한 것이 있으면 언제든 질문해주세요!",
         sender: "assistant",
         timestamp: "오전 10:30"
       };
@@ -248,7 +248,7 @@ export default function ChatArea({ onMessageSent, serverConnected = false }: Cha
       <div className="p-4 border-b border-gray-200 flex-shrink-0">
         <h2 className="text-gray-800 flex items-center gap-2">
           <Rocket className="w-5 h-5" />
-          NASA 우주 생물학 챗봇
+          MARS – Mission for Astrobiology and Research Support
         </h2>
         <p className="text-sm text-gray-600">
           미세중력, 우주 환경, 우주 생물학 실험에 대해 무엇이든 질문해보세요
