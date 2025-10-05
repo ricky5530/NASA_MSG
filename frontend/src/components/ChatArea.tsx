@@ -45,7 +45,7 @@ export default function ChatArea({ onMessageSent, serverConnected = false }: Cha
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
-      content: "안녕하세요! 저는 MARS입니다. 미세중력 실험, 우주 환경에서의 생명체 연구, 우주 생물학 데이터에 대해 궁금한 것이 있으면 언제든 질문해주세요!",
+      content: "안녕하세요! 저는 MARS입니다. 우주 생물학에 관해서 궁금한 것이 있으면 언제든 질문해주세요!",
       sender: "assistant",
       timestamp: new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: true })
     }
@@ -72,7 +72,7 @@ export default function ChatArea({ onMessageSent, serverConnected = false }: Cha
       // 초기 환영 메시지 + 불러온 메시지
       const welcomeMessage: Message = {
         id: "1",
-        content: "안녕하세요! 저는 MARS입니다. 미세중력 실험, 우주 환경에서의 생명체 연구, 우주 생물학 데이터에 대해 궁금한 것이 있으면 언제든 질문해주세요!",
+        content: "안녕하세요! 저는 MARS입니다. 우주 생물학에 관해서 궁금한 것이 있으면 언제든 질문해주세요!",
         sender: "assistant",
         timestamp: new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: true })
       };
