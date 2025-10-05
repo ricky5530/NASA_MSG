@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-LangChain BaseRetriever over existing FAISS index + meta.jsonl produced by scripts/embedding.py
+LangChain BaseRetriever over existing FAISS index + meta.jsonl produced by rag/embedding.py
 
 - Loads FAISS index from data/index/faiss.index
 - Loads metadata from data/index/meta.jsonl (one JSON per line)
@@ -10,28 +10,23 @@ LangChain BaseRetriever over existing FAISS index + meta.jsonl produced by scrip
 
 Env:
   OPENAI_API_KEY
-  OPENAI_EMBED_MODEL (default: text-embedding-3-small)
 """
 from __future__ import annotations
 from typing import List, Tuple, Dict, Any
-import os
 import json
 from pathlib import Path
 
 import numpy as np
 import faiss
-from dotenv import load_dotenv
 
 from langchain_core.documents import Document
 from langchain_core.retrievers import BaseRetriever
 from langchain_openai.embeddings import OpenAIEmbeddings
-from pydantic import PrivateAttr  # pydantic v2
-
-load_dotenv()
+from pydantic import PrivateAttr
 
 DEFAULT_INDEX = Path("data/index/faiss.index")
 DEFAULT_META = Path("data/index/meta.jsonl")
-DEFAULT_EMBED = os.getenv("OPENAI_EMBED_MODEL", "text-embedding-3-small")
+DEFAULT_EMBED = "text-embedding-3-small"
 
 
 def _read_meta(meta_path: Path) -> List[Dict[str, Any]]:

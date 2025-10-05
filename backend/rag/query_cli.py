@@ -1,21 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-CLI for the new RAG pipeline with figure extraction (Markdown output)
+Markdown for the new RAG pipeline with figure extraction (Markdown output)
 - Only show cited PMCIDs in Sources
 - Robust linking for citations in the answer:
   * [PMC12345] / [pmc 12345] / [[PMC12345]] (no link) / [PMC12345, PMC67890]
 - Figures with [[Tileshop]] hyperlink
 """
 from __future__ import annotations
-import argparse
-import json
-import os
 import re
 from pathlib import Path
 from typing import Dict, List, Any, Set, Optional
 
-from dotenv import load_dotenv
 from query_pipeline import run_query
 
 BASE_DIR = Path(__file__).resolve().parents[1]
@@ -222,13 +218,8 @@ def build_markdown(
     fig_caption_max_chars: int = 0,
 ) -> str:
     """
-    run_query 결과(result)를 받아 최종 Markdown 문자열을 생성해 반환합니다.
-    기존 _render_* 유틸을 그대로 활용합니다.
+    run_query -> Markdown return
     """
-    # 아래 유틸 함수들은 파일 내 기존 구현을 재사용합니다.
-    # _render_answer_md(question, answer, sources)
-    # _render_sources_md_cited_only(answer, sources)
-    # _render_figures_md(result, fig_max_images=..., fig_caption_max_chars=...)
     parts = []
 
     answer_md = _render_answer_md(question, result.get("answer", ""), result.get("sources") or [])
@@ -262,8 +253,8 @@ def query_to_markdown(
     *,
     index_path: Optional[str] = INDEX_PATH,
     meta_path: Optional[str] = META_PATH,
-    embed_model: Optional[str] = os.getenv("OPENAI_EMBED_MODEL", "text-embedding-3-small"),
-    chat_model: Optional[str] = os.getenv("OPENAI_CHAT_MODEL", "gpt-4o-mini"),
+    embed_model: Optional[str] = "text-embedding-3-small",
+    chat_model: Optional[str] = "gpt-4o-mini",
     k_per_query: int = 6,
     top_k_final: int = 6,
     enable_reform: bool = True,

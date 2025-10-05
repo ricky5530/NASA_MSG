@@ -7,21 +7,15 @@ Query Reformer for scientific RAG (synonym expansion removed)
 
 Env:
   OPENAI_API_KEY
-  OPENAI_CHAT_MODEL (default: gpt-4o-mini)
 """
 from __future__ import annotations
 from typing import List, Optional
-import os
 from dataclasses import dataclass
 
-from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from langchain.prompts import PromptTemplate
 
-load_dotenv()
-
-DEFAULT_CHAT_MODEL = os.getenv("OPENAI_CHAT_MODEL", "gpt-4o-mini")
-
+DEFAULT_CHAT_MODEL =  "gpt-4o-mini"
 
 @dataclass
 class ReformedQueries:

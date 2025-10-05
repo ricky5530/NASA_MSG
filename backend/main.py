@@ -1,12 +1,11 @@
 """
-NASA 우주 생물학 챗봇 백엔드 - 실제 논문 학습 시스템 (슬림 버전)
+NASA 우주 생물학 챗봇 백엔드 - 실제 논문 학습 시스템
 """
 
 from fastapi import FastAPI, HTTPException, Request, Body, Response
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import os
-import json  # 추가된 임포트
 from datetime import datetime, timezone
 import logging
 from dotenv import load_dotenv
@@ -24,9 +23,6 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-# 데이터베이스 관련 코드 제거 (SQLAlchemy timeout 문제 해결)
-# from database import ...
-
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -39,33 +35,11 @@ META_PATH = BASE_DIR / "data" / "index" / "meta.jsonl"
 @asynccontextmanager
 async def lifespan(app):
     logger.info("🌟 Lifespan 시작!")
-    # 데이터베이스 초기화 제거 (SQLAlchemy timeout 문제 해결)
 
     try:
         yield
     finally:
         logger.info("🛑 Lifespan 종료!")
-#TODO: ai 써서 답변 토대로 topic 갯수 올리기
-TOPIC_KEYWORDS = {
-    "microgravity": [r"\bmicrogravity\b", r"미세중력", r"마이크로중력"],
-    "radiation": [r"\bradiation\b", r"방사선"],
-    "plant_growth": [r"\bplant\b", r"식물", r"arabidopsis"],
-    "bone_density": [r"\bbone\b", r"골밀도"],
-    "microbiome": [r"\bmicrobiome\b", r"미생물"],
-    "cardio": [r"\bcardio", r"심혈관"],
-    "stem_cell": [r"\bstem cell\b", r"줄기세포"],
-    "iss": [r"\bISS\b", r"국제우주정거장"],
-}
-
-def infer_topic(text: str) -> str:
-    if not text:
-        return "general"
-    t = text.lower()
-    for topic, patterns in TOPIC_KEYWORDS.items():
-        for p in patterns:
-            if re.search(p, t, flags=re.IGNORECASE):
-                return topic
-    return "general"
 
 # Heuristic으로 언어 감지 -> Dashboard에 update
 def detect_language_heuristic(text: str) -> str:
@@ -204,7 +178,18 @@ async def rag_markdown(payload: dict = Body(...)):
         try:
             latency_ms = (time.time() - start_ts) * 1000.0
             lang = detect_language_heuristic(q)
-            topic = infer_topic(q)
+
+            topic = None
+            try:
+                for line in reversed(md.splitlines()):
+                    s = line.strip()
+                    if s.lower().startswith("> #### topic :".lower()):
+                        topic = s.split(":", 1)[1].strip()
+                        break
+            except Exception:
+                topic = None
+            # 토픽이 없으면 집계 생략 (표시/카운트 모두 건너뜀)
+            has_topic = bool(topic)
 
             preview = q.replace("\n", " ").strip()
             if len(preview) > 80:
@@ -213,9 +198,12 @@ async def rag_markdown(payload: dict = Body(...)):
             DASHBOARD["messages_total"] += 1
             DASHBOARD["latencies_ms"].append(latency_ms)
             DASHBOARD["lang_counter"][lang] += 1
-            DASHBOARD["topic_counter"][topic] += 1
             ts = time.time()
-            DASHBOARD["events"].append((ts, lang, topic, preview))
+            if has_topic:
+                DASHBOARD["topic_counter"][topic] += 1
+                DASHBOARD["events"].append((ts, lang, topic, preview))
+            else:
+                DASHBOARD["events"].append((ts, lang, "", preview))
             DASHBOARD["recent"].appendleft({
                 "ts": datetime.fromtimestamp(ts, tz=timezone.utc).isoformat(),
                 "language": lang,

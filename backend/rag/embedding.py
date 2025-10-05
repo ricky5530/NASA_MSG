@@ -7,11 +7,11 @@ Embedding builder (minimal)
 - Saves FAISS index (cosine via L2 normalization) and metadata JSONL
 
 Usage:
-  # .env에 OPENAI_API_KEY가 있는 상태에서 인자 없이 실행
-  python scripts/embedding.py
+  # .env: OPENAI_API_KEY use
+  python rag/embedding.py
 
 Optional:
-  python scripts/embedding.py --articles articles --out data/index --model text-embedding-3-small --batch-size 256
+  python rag/embedding.py --articles articles --out data/index --model text-embedding-3-small --batch-size 256
 """
 import argparse
 import json

@@ -7,10 +7,9 @@ Figure utilities
 - Resolve "Figure N" / "Fig. N" references in text to tileshop/image URLs
 """
 from __future__ import annotations
-from typing import Dict, Any, List, Iterable, Optional, Tuple, Set
+from typing import Dict, Any, List, Optional, Set
 from pathlib import Path
 from functools import lru_cache
-import os
 import json
 import re
 

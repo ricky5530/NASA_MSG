@@ -12,9 +12,7 @@ from __future__ import annotations
 from typing import List, Dict, Any, Optional
 from dataclasses import dataclass, asdict
 from pathlib import Path
-import os
 
-from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from langchain.prompts import PromptTemplate
 from langchain_core.documents import Document
@@ -23,13 +21,11 @@ from query_retriever import FAISSJsonlRetriever, reciprocal_rank_fusion
 from query_figure_utils import collect_figures_for_docs
 from query_reformer import QueryReformer
 
-load_dotenv()
-
 BASE_DIR = Path(__file__).resolve().parents[1]
 DEFAULT_INDEX = BASE_DIR / "data" / "index" / "faiss.index"
 DEFAULT_META = BASE_DIR / "data" / "index" / "meta.jsonl"
-DEFAULT_EMBED_MODEL = os.getenv("OPENAI_EMBED_MODEL", "text-embedding-3-small")
-DEFAULT_CHAT_MODEL = os.getenv("OPENAI_CHAT_MODEL", "gpt-4o-mini")
+DEFAULT_EMBED_MODEL = "text-embedding-3-small"
+DEFAULT_CHAT_MODEL = "gpt-4o-mini"
 
 ANSWER_PROMPT = PromptTemplate(
     input_variables=["context", "question"],
@@ -208,6 +204,7 @@ class RAGPipeline:
                     "- PRIORITIZE the core subject of the Question; use the Answer to refine specificity.\n"
                     "- If the Question and Answer diverge, prefer the Question’s domain term.\n"
                     "- Output ONLY the topic text (no quotes, no punctuation, no extra words).\n"
+                    "- ALWAYS output in English (even if the Question is not in English).\n"
                     "- Use Title Case in English (e.g., 'Microgravity', 'Immune System').\n"
                     "- If unclear, output 'General'.\n\n"
                     f"Question:\n{question}\n\nAnswer:\n{answer}\n\nTopic:"
