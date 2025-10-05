@@ -338,21 +338,21 @@ export default function ChatArea({ onMessageSent, serverConnected = false }: Cha
       </div>
 
       <div className="p-5 border-t border-gray-200 flex-shrink-0 bg-white">
-        <div className="flex gap-3 max-w-4xl mx-auto items-end">
+        <div className="max-w-4xl mx-auto relative">
           <textarea
             ref={textareaRef}
             value={inputMessage}
             onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setInputMessage(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="MARS에게 물어보기..."
-            className="flex-1 bg-white border border-gray-300 rounded px-4 py-3 shadow-sm focus:border-blue-500 focus:ring-blue-500 resize-none min-h-[48px] max-h-[120px] overflow-y-auto text-base"
+            className="w-full bg-white border border-gray-300 rounded-lg px-4 py-3 pr-14 shadow-sm focus:border-blue-500 focus:ring-blue-500 resize-none min-h-[48px] max-h-[120px] overflow-y-auto text-base"
             disabled={isLoading}
             style={{ minHeight: '48px', maxHeight: '120px' }}
           />
           <button
             onClick={sendMessage}
             disabled={!inputMessage.trim() || isLoading}
-            className="bg-blue-500 hover:bg-blue-600 text-white disabled:bg-gray-400 px-5 py-3 rounded flex-shrink-0"
+            className="absolute right-2 bottom-2 bg-blue-500 hover:bg-blue-600 text-white disabled:bg-gray-400 p-2 rounded-lg flex-shrink-0 transition-colors"
           >
             {isLoading ? (
               <Loader2 className="w-5 h-5 animate-spin" />

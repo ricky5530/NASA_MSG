@@ -180,7 +180,7 @@ export default function Dashboard() {
         </div>
 
         {/* 주요 지표 카드 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <div className="bg-white rounded-lg shadow-sm p-8 border border-gray-200">
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-base font-medium text-gray-600">전체 메시지</h3>
