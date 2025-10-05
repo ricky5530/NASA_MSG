@@ -244,8 +244,8 @@ export default function ChatArea({ onMessageSent, serverConnected = false }: Cha
 
   return (
     <div className="h-full flex flex-col bg-white">
-      <div className="flex-1 p-4 overflow-y-auto" ref={chatListRef}>
-        <div className="space-y-4 max-w-6xl mx-auto pt-24">
+      <div className="flex-1 px-4 py-4 overflow-y-auto" ref={chatListRef}>
+        <div className="space-y-4 max-w-4xl mx-auto pt-24">
           {messages.map((message: Message, index) => (
             <div
               key={`${message.id}-${index}`}
@@ -254,24 +254,24 @@ export default function ChatArea({ onMessageSent, serverConnected = false }: Cha
               }`}
             >
               {message.sender === "assistant" && (
-                <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center mt-1">
+                <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
                   {message.loading ? (
                     <Loader2 className="w-4 h-4 text-white animate-spin" />
                   ) : (
-                    <div className="w-5 h-5 rounded-full bg-red-600 relative">
-                      <div className="absolute w-1 h-1 bg-red-800 rounded-full top-1.5 left-1"></div>
-                      <div className="absolute w-1.5 h-1.5 bg-red-800 rounded-full top-1 right-1"></div>
-                      <div className="absolute w-1 h-1 bg-red-800 rounded-full bottom-1.5 left-1.5"></div>
+                    <div className="w-5 h-5 rounded-full bg-red-600 relative shadow-inner">
+                      <div className="absolute w-1 h-1 bg-red-800 rounded-full top-1.5 left-1 animate-pulse"></div>
+                      <div className="absolute w-1.5 h-1.5 bg-red-800 rounded-full top-1 right-1 animate-pulse" style={{ animationDelay: '0.2s' }}></div>
+                      <div className="absolute w-1 h-1 bg-red-800 rounded-full bottom-1.5 left-1.5 animate-pulse" style={{ animationDelay: '0.4s' }}></div>
                     </div>
                   )}
                 </div>
               )}
               
               <div
-                className={`max-w-4xl p-5 rounded-lg ${
+                className={`max-w-4xl p-5 rounded-lg transition-all duration-200 ${
                   message.sender === "user"
-                    ? "bg-blue-500 text-white max-w-2xl"
-                    : "bg-white text-gray-800 border border-gray-200 shadow-sm"
+                    ? "bg-blue-500 text-white max-w-2xl shadow-lg hover:shadow-xl"
+                    : "bg-white text-gray-800 border border-gray-200 shadow-md hover:shadow-lg"
                 }`}
               >
                 {message.sender === "assistant" ? (
