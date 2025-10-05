@@ -14,8 +14,8 @@ const getBaseUrl = () => {
     return envApiUrl;
   }
   
-  // Fallback: Railway production URL
-  const fallbackUrl = 'https://hackaton-pj-production.up.railway.app';
+  // Fallback: Render production URL
+  const fallbackUrl = 'https://nasa-msg.onrender.com';
   console.warn('⚠️ VITE_API_URL not set, using fallback:', fallbackUrl);
   return fallbackUrl;
 };

@@ -1,87 +1,82 @@
-# 🚀 MARS - Mission for Astrobiology and Research Support
+# MARS: Mission for Astrobiology and Research Support
 
-**NASA 우주 생물학 데이터 기반 AI 챗봇 서비스**
+MARS is a specialized AI chatbot service powered by NASA's astrobiology research data. It's designed to provide expert answers to questions about everything from microgravity experiments to the study of life in space environments.
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-nasamsg.vercel.app-blue?style=for-the-badge&logo=vercel)](https://nasamsg.vercel.app/)
 [![Backend](https://img.shields.io/badge/Backend-Render-green?style=for-the-badge&logo=render)](https://nasa-msg.onrender.com)
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](LICENSE)
 
-> **🌌 우주 생물학의 세계를 탐험하세요!**  
-> MARS는 NASA의 우주 생물학 연구 데이터를 학습한 AI 챗봇으로, 미세중력 실험부터 우주 환경에서의 생명체 연구까지 전문적인 질문에 답변합니다.
+## Project Overview
 
-## 🌟 프로젝트 개요
+**Live Service**: [nasamsg.vercel.app](https://nasamsg.vercel.app/)
 
-**🔗 라이브 서비스**: [nasamsg.vercel.app](https://nasamsg.vercel.app/)
+MARS is an AI chatbot that has been trained on 607 NASA astrobiology research papers. It serves as a knowledge platform, making complex scientific information easily accessible to researchers, students, and anyone interested in the field of astrobiology.
 
-MARS(Mission for Astrobiology and Research Support)는 NASA의 우주 생물학 연구 논문 607편을 학습한 전문 AI 챗봇입니다. 연구자, 학생, 그리고 우주 생물학에 관심 있는 모든 사람들이 쉽게 접근할 수 있는 지식 플랫폼을 제공합니다.
+### Key Features
 
-### 🎯 주요 특징
+- **Specialized Data**: Trained on 607 NASA astrobiology papers
+- **Intelligent RAG**: Utilizes FAISS vector search and OpenAI's GPT for accurate responses
+- **Multi-language Support**: Automatic language detection and response in 15 languages
+- **Real-time Dashboard**: Provides user statistics and popular topic analysis
+- **Conversation History**: Stored locally in the user's browser to protect privacy
+- **Responsive Design**: Optimized for a seamless experience on all devices
 
-- **📚 전문 데이터**: NASA 우주 생물학 논문 607편 학습
-- **🤖 지능형 RAG**: FAISS 벡터 검색 + OpenAI GPT 기반 답변
-- **🌍 다국어 지원**: 15개 언어 자동 감지 및 응답
-- **📊 실시간 대시보드**: 사용 통계 및 인기 주제 분석
-- **💾 대화 히스토리**: 로컬 저장으로 개인정보 보호
-- **📱 반응형 디자인**: 모든 디바이스에서 최적화된 경험
+## Live Service
 
-## 🚀 라이브 서비스
+### Access the service at [nasamsg.vercel.app](https://nasamsg.vercel.app/)
 
-### 🌐 **서비스 접속**: [nasamsg.vercel.app](https://nasamsg.vercel.app/)
+The MARS chatbot is currently live. You can start a conversation with a specialized AI trained on NASA's astrobiology data right now.
 
-**MARS 챗봇이 지금 바로 서비스 중입니다!** 🚀  
-[nasamsg.vercel.app](https://nasamsg.vercel.app/)에서 NASA 우주 생물학 전문 AI와 대화해보세요.
+**Features**:
+- **Free to Use**: No registration or sign-up required
+- **Web Browser Access**: No app installation needed
+- **Expert AI Consultation**: Trained on 607 NASA papers
+- **Multi-language Support**: Automatically detects and responds in 15 languages
 
-✨ **특징**:
-- 🆓 **무료 사용** - 별도 회원가입 불필요
-- 🌍 **웹 브라우저 접속** - 앱 설치 없이 즉시 이용
-- 🤖 **전문 AI 상담** - 607편의 NASA 논문 학습 완료
-- 🗣️ **다국어 지원** - 15개 언어 자동 감지 및 응답
+#### Example Questions
+- "How does microgravity affect plant growth?"
+- "Tell me about microbial research on the International Space Station"
+- "What is the impact of the space environment on human bone density?"
+- "Discuss Mars missions and astrobiology research"
 
-#### 💡 사용 예시
-- *"미세중력이 식물 성장에 미치는 영향은?"*
-- *"우주정거장에서의 미생물 연구에 대해 알려주세요"*
-- *"우주 환경이 인간의 골밀도에 미치는 영향은?"*
-- *"Mars missions and astrobiology research"*
-
-## 🏗️ 아키텍처
+## Architecture
 
 ```
 NASA_MSG/
-├── frontend/          # React + TypeScript 프론트엔드
-├── backend/           # FastAPI + Python 백엔드
-├── README.md          # 이 파일
-└── 기타 설정 파일들
+├── frontend/          # React + TypeScript Frontend
+├── backend/           # FastAPI + Python Backend
+├── README.md          # This file
+└── Other configuration files
 ```
 
-### 🎨 프론트엔드 ([Vercel](https://vercel.com/))
+### Frontend (Vercel)
 - **React 18.2** + **TypeScript**
-- **Vite** 빌드 시스템
-- **Tailwind CSS** 스타일링
-- **실시간 채팅 인터페이스**
-- **통계 대시보드**
+- **Vite** build system
+- **Tailwind CSS** styling
+- **Real-time chat interface**
+- **Statistics dashboard**
 
-### ⚙️ 백엔드 ([Render](https://render.com/))
+### Backend (Render)
 - **FastAPI** + **Python 3.10**
-- **SQLite** 데이터베이스
-- **FAISS** 벡터 검색
+- **SQLite** database
+- **FAISS** vector search
 - **OpenAI GPT** API
-- **LangChain** RAG 파이프라인
+- **LangChain** RAG pipeline
 
-## 📊 데이터 & AI
+## Data & AI
 
-### 🔬 학습 데이터
-- **출처**: NASA 우주 생물학 연구 논문
-- **규모**: 607편의 전문 논문
-- **범위**: 미세중력, 우주 환경, 생명체 연구, 우주정거장 실험 등
-- **처리**: 청크 분할 + 벡터 임베딩 (FAISS 인덱스)
+### Training Data
+- **Source**: 607 NASA astrobiology research papers
+- **Coverage**: Microgravity, space environment, life in space, ISS experiments
+- **Processing**: Chunking and vector embedding with FAISS index
 
-### 🧠 AI 시스템
-- **RAG (Retrieval-Augmented Generation)**: 정확한 정보 검색 + 자연어 생성
-- **벡터 검색**: FAISS를 통한 고속 의미적 검색
-- **언어 모델**: OpenAI GPT-4 기반 답변 생성
-- **다국어**: 자동 언어 감지 및 번역
+### AI System
+- **RAG (Retrieval-Augmented Generation)**: Precise information retrieval and natural language generation
+- **Vector Search**: High-speed semantic search via FAISS
+- **Language Model**: OpenAI GPT-4 for response generation
+- **Multi-language**: Automatic language detection and translation
 
-## 🛠️ 기술 스택
+## Technology Stack
 
 ### Frontend
 ![React](https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=react&logoColor=black)
@@ -105,118 +100,118 @@ NASA_MSG/
 ![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat-square&logo=vercel&logoColor=white)
 ![Render](https://img.shields.io/badge/Render-46E3B7?style=flat-square&logo=render&logoColor=white)
 
-## 🚀 시작하기
+## Getting Started
 
-### 🔧 로컬 개발 환경 설정
+### Local Development Setup
 
-#### 1. 저장소 클론
+#### 1. Clone the repository
 ```bash
 git clone https://github.com/ricky5530/NASA_MSG.git
 cd NASA_MSG
 ```
 
-#### 2. 백엔드 설정
+#### 2. Set up the backend
 ```bash
 cd backend
 pip install -r requirements.txt
 
-# 환경변수 설정 (.env 파일 생성)
+# Configure environment variables (.env file)
 echo "OPENAI_API_KEY=your_openai_api_key" > .env
 
-# 서버 실행
+# Run the server
 uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-#### 3. 프론트엔드 설정
+#### 3. Set up the frontend
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-#### 4. 브라우저에서 확인
+#### 4. View in your browser
 - Frontend: http://localhost:5173
 - Backend API: http://localhost:8000
 
-## 📚 API 문서
+## API Documentation
 
-백엔드가 실행 중일 때 다음 주소에서 API 문서를 확인할 수 있습니다:
+Once the backend is running, you can access the API documentation at:
 - **Swagger UI**: http://localhost:8000/docs
 - **ReDoc**: http://localhost:8000/redoc
 
-### 🔗 주요 엔드포인트
+### Key Endpoints
 
-| 엔드포인트 | 메서드 | 설명 |
-|-----------|--------|------|
-| `/rag/md` | POST | RAG 기반 질문 답변 |
-| `/dashboard/summary` | GET | 사용 통계 요약 |
-| `/dashboard/activity` | GET | 최근 활동 로그 |
-| `/health` | GET | 서버 상태 확인 |
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/rag/md` | POST | RAG-based question and answer |
+| `/dashboard/summary` | GET | Usage statistics summary |
+| `/dashboard/activity` | GET | Recent activity log |
+| `/health` | GET | Server status check |
 
-## 📊 모니터링 & 분석
+## Monitoring & Analytics
 
-### 📈 실시간 대시보드
-- **전체 메시지 수**: 누적 대화 통계
-- **최근 1시간 활동**: 실시간 사용량
-- **평균 응답 시간**: AI 성능 모니터링
-- **언어별 분포**: 다국어 사용 현황
-- **인기 토픽**: 주요 관심 주제
+### Real-time Dashboard
+- **Total Messages**: Cumulative conversation statistics
+- **Recent Activity**: Real-time usage monitoring
+- **Average Response Time**: AI performance tracking
+- **Language Distribution**: Multi-language usage patterns
+- **Popular Topics**: Top discussion themes
 
-### 🗄️ 데이터 관리
-- **자동 정리**: 24시간 이상 된 데이터 자동 삭제
-- **용량 관리**: SQLite 크기 모니터링 및 최적화
-- **백업**: 주요 설정 및 인덱스 파일 Git LFS 관리
+### Data Management
+- **Automatic Cleanup**: Data older than 24 hours is automatically deleted
+- **Size Monitoring**: SQLite database size monitoring and optimization
+- **Backup**: Key configurations and index files managed with Git LFS
 
-## 🔒 보안 & 개인정보
+## Security & Privacy
 
-- **로컬 저장**: 대화 히스토리는 사용자 브라우저에만 저장
-- **익명 사용**: 회원가입 없이 익명으로 이용 가능
-- **데이터 정리**: 서버 데이터는 24시간 후 자동 삭제
-- **CORS 설정**: 안전한 크로스 도메인 통신
+- **Local Storage**: Conversation history is stored only in the user's browser
+- **Anonymous Usage**: No registration required for anonymous use
+- **Data Deletion**: Server-side data is automatically deleted after 24 hours
+- **CORS Configuration**: Secure cross-domain communication
 
-## 🤝 기여하기
+## Contributing
 
-### 🐛 버그 리포트
-이슈가 발견되면 [GitHub Issues](https://github.com/ricky5530/NASA_MSG/issues)에 리포트해주세요.
+### Bug Reports
+Please report any issues you find on [GitHub Issues](https://github.com/ricky5530/NASA_MSG/issues).
 
-### 💡 기능 제안
-새로운 기능 아이디어가 있으시면 언제든 제안해주세요!
+### Feature Suggestions
+We welcome ideas for new features.
 
-### 🔧 개발 참여
+### Development
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
 3. Commit your changes (`git commit -m 'Add amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📄 라이선스
+## License
 
-이 프로젝트는 [MIT License](LICENSE) 하에 배포됩니다.
+This project is distributed under the [MIT License](LICENSE).
 
-## 👥 팀
+## Team
 
-**Team MSG** - NASA 우주 생물학 AI 챗봇 개발팀
+**Team MSG** - Developers of the NASA Astrobiology AI Chatbot
 
-## 🙏 감사의 말
+## Acknowledgements
 
-- **NASA**: 우주 생물학 연구 데이터 제공
-- **OpenAI**: GPT API 서비스
-- **Vercel & Render**: 안정적인 호스팅 서비스
-- **오픈소스 커뮤니티**: 훌륭한 도구들
+- **NASA**: For providing the astrobiology research data
+- **OpenAI**: For the GPT API service
+- **Vercel & Render**: For providing stable hosting services
+- **Open Source Community**: For the invaluable tools and libraries
 
 ---
 
-## 🌌 **MARS와 함께 우주 생물학의 미래를 탐험해보세요!**
+## Explore the Future of Astrobiology with MARS
 
-### 🔗 **지금 바로 체험하기** → [nasamsg.vercel.app](https://nasamsg.vercel.app/)
+### [Start Now → nasamsg.vercel.app](https://nasamsg.vercel.app/)
 
-> 💫 **NASA 데이터로 학습한 전문 AI가 여러분의 우주 생물학 궁금증을 해결해드립니다**
+NASA's specialized AI trained on 607 astrobiology research papers is ready to answer your questions about space science.
 
 ---
 
 <div align="center">
 
-**Made with ❤️ by Team MSG**
+**Made with care by Team MSG**
 
 *"Bridging the gap between space science and humanity"*
 
