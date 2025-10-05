@@ -298,7 +298,8 @@ export default function Sidebar({ currentView, onViewChange }: SidebarProps) {
       {/* 푸터 */}
       <div className="p-4 border-t border-gray-700 flex-shrink-0">
         <div className="text-xs text-gray-500 text-center">
-          MARS
+          <div>MARS</div>
+          <div className="text-gray-600 mt-1">made by Team MSG</div>
         </div>
       </div>
     </div>
