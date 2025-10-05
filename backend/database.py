@@ -91,8 +91,6 @@ class Analytics(Base):
     id = Column(Integer, primary_key=True, index=True)
     date = Column(DateTime, default=datetime.utcnow, index=True)
     hour = Column(Integer)  # 0-23
-    total_users = Column(Integer, default=0)
-    active_users = Column(Integer, default=0)
     total_messages = Column(Integer, default=0)
     total_conversations = Column(Integer, default=0)
     avg_latency_ms = Column(Float, default=0.0)
@@ -273,18 +271,6 @@ def get_conversation_history(db, conversation_id: str) -> dict:
             for msg in messages
         ]
     }
-
-
-def get_active_users_count(db) -> int:
-    """현재 활성 사용자 수 (최근 1시간 이내 활동)"""
-    from datetime import timedelta
-    one_hour_ago = datetime.utcnow() - timedelta(hours=1)
-    return db.query(User).filter(User.last_seen >= one_hour_ago).count()
-
-
-def get_total_users_count(db) -> int:
-    """전체 사용자 수"""
-    return db.query(User).count()
 
 
 # 앱 시작 시 자동 실행
