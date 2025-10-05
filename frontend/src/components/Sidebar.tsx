@@ -147,7 +147,10 @@ export default function Sidebar({ currentView, onViewChange }: SidebarProps) {
     <div className="w-80 bg-gray-900 text-white flex flex-col h-full overflow-hidden">
       {/* 헤더 */}
       <div className="p-4 border-b border-gray-700 flex items-center justify-between flex-shrink-0">
-        <h2 className="text-lg font-bold">MARS</h2>
+        <div className="flex-1">
+          <h2 className="text-xl font-bold">MARS</h2>
+          <p className="text-sm text-gray-400 mt-1">Mission for Astrobiology and Research Support</p>
+        </div>
         <button
           onClick={() => setIsCollapsed(true)}
           className="p-1 hover:bg-gray-800 rounded transition-colors"
@@ -161,52 +164,52 @@ export default function Sidebar({ currentView, onViewChange }: SidebarProps) {
       <div className="p-4 flex gap-2 flex-shrink-0">
         <button
           onClick={() => onViewChange('chat')}
-          className={`flex-1 py-2 px-3 rounded flex items-center justify-center gap-2 transition-colors ${
+          className={`flex-1 py-3 px-4 rounded flex items-center justify-center gap-2 transition-colors text-sm ${
             currentView === 'chat'
               ? 'bg-blue-600 text-white'
               : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
           }`}
         >
-          <MessageSquare className="w-4 h-4" />
+          <MessageSquare className="w-5 h-5" />
           채팅
         </button>
         <button
           onClick={() => onViewChange('dashboard')}
-          className={`flex-1 py-2 px-3 rounded flex items-center justify-center gap-2 transition-colors ${
+          className={`flex-1 py-3 px-4 rounded flex items-center justify-center gap-2 transition-colors text-sm ${
             currentView === 'dashboard'
               ? 'bg-blue-600 text-white'
               : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
           }`}
         >
-          <BarChart3 className="w-4 h-4" />
+          <BarChart3 className="w-5 h-5" />
           대시보드
         </button>
       </div>
 
       {/* 대시보드 요약 */}
       <div className="px-4 pb-3 border-b border-gray-700 flex-shrink-0">
-        <h3 className="text-xs font-semibold text-gray-400 mb-2 flex items-center gap-2">
-          <Activity className="w-3 h-3" />
+        <h3 className="text-sm font-semibold text-gray-400 mb-3 flex items-center gap-2">
+          <Activity className="w-4 h-4" />
           실시간 통계
         </h3>
         <div className="grid grid-cols-2 gap-2">
-          <div className="bg-gray-800 rounded p-2">
-            <div className="text-xs text-gray-400">전체 메시지</div>
-            <div className="text-lg font-bold">{dashboardData?.messages_total || 0}</div>
+          <div className="bg-gray-800 rounded p-3">
+            <div className="text-sm text-gray-400">전체 메시지</div>
+            <div className="text-xl font-bold">{dashboardData?.messages_total || 0}</div>
           </div>
-          <div className="bg-gray-800 rounded p-2">
-            <div className="text-xs text-gray-400">최근 1시간</div>
-            <div className="text-lg font-bold">{dashboardData?.messages_last_hour || 0}</div>
+          <div className="bg-gray-800 rounded p-3">
+            <div className="text-sm text-gray-400">최근 1시간</div>
+            <div className="text-xl font-bold">{dashboardData?.messages_last_hour || 0}</div>
           </div>
-          <div className="bg-gray-800 rounded p-2">
-            <div className="text-xs text-gray-400">평균 응답</div>
-            <div className="text-sm font-bold">
+          <div className="bg-gray-800 rounded p-3">
+            <div className="text-sm text-gray-400">평균 응답</div>
+            <div className="text-base font-bold">
               {dashboardData?.avg_latency_ms ? `${dashboardData.avg_latency_ms}ms` : 'N/A'}
             </div>
           </div>
-          <div className="bg-gray-800 rounded p-2">
-            <div className="text-xs text-gray-400">언어</div>
-            <div className="text-sm font-bold flex gap-1">
+          <div className="bg-gray-800 rounded p-3">
+            <div className="text-sm text-gray-400">언어</div>
+            <div className="text-base font-bold flex gap-1">
               {dashboardData?.languages.slice(0, 3).map((lang, idx) => (
                 <span key={idx}>{getLanguageEmoji(lang.name)}</span>
               ))}
@@ -218,13 +221,13 @@ export default function Sidebar({ currentView, onViewChange }: SidebarProps) {
       {/* 인기 토픽 */}
       {dashboardData && dashboardData.topics.length > 0 && (
         <div className="px-4 py-3 border-b border-gray-700 flex-shrink-0">
-          <h3 className="text-xs font-semibold text-gray-400 mb-2 flex items-center gap-2">
-            <TrendingUp className="w-3 h-3" />
+          <h3 className="text-sm font-semibold text-gray-400 mb-3 flex items-center gap-2">
+            <TrendingUp className="w-4 h-4" />
             인기 토픽
           </h3>
-          <div className="space-y-1">
+          <div className="space-y-2">
             {dashboardData.topics.slice(0, 3).map((topic, idx) => (
-              <div key={idx} className="flex items-center justify-between text-xs">
+              <div key={idx} className="flex items-center justify-between text-sm">
                 <span className="text-gray-300">{topic.name.replace(/_/g, ' ')}</span>
                 <span className="text-blue-400 font-semibold">{topic.count}</span>
               </div>
@@ -236,8 +239,8 @@ export default function Sidebar({ currentView, onViewChange }: SidebarProps) {
       {/* 대화 기록 */}
       <div className="flex-1 overflow-hidden flex flex-col">
         <div className="px-4 py-3 flex items-center justify-between border-b border-gray-700 flex-shrink-0">
-          <h3 className="text-xs font-semibold text-gray-400 flex items-center gap-2">
-            <History className="w-3 h-3" />
+          <h3 className="text-sm font-semibold text-gray-400 flex items-center gap-2">
+            <History className="w-4 h-4" />
             대화 기록 ({conversations.length})
           </h3>
           <button
@@ -245,7 +248,7 @@ export default function Sidebar({ currentView, onViewChange }: SidebarProps) {
             className="p-1 hover:bg-gray-700 rounded transition-colors"
             title="새 대화 시작"
           >
-            <Plus className="w-4 h-4 text-green-400" />
+            <Plus className="w-5 h-5 text-green-400" />
           </button>
         </div>
         
@@ -268,12 +271,12 @@ export default function Sidebar({ currentView, onViewChange }: SidebarProps) {
                         {conv.title}
                       </h4>
                       <div className="flex items-center gap-2 mt-1">
-                        <Clock className="w-3 h-3 text-gray-400" />
-                        <span className="text-xs text-gray-400">
+                        <Clock className="w-4 h-4 text-gray-400" />
+                        <span className="text-sm text-gray-400">
                           {new Date(conv.timestamp).toLocaleDateString('ko-KR')}
                         </span>
                       </div>
-                      <span className="text-xs text-gray-500">
+                      <span className="text-sm text-gray-500">
                         {conv.messageCount}개 메시지
                       </span>
                     </div>
@@ -285,7 +288,7 @@ export default function Sidebar({ currentView, onViewChange }: SidebarProps) {
                       className="opacity-0 group-hover:opacity-100 p-1 hover:bg-gray-600 rounded transition-all"
                       title="삭제"
                     >
-                      <Trash2 className="w-4 h-4 text-red-400" />
+                      <Trash2 className="w-5 h-5 text-red-400" />
                     </button>
                   </div>
                 </div>
@@ -297,7 +300,7 @@ export default function Sidebar({ currentView, onViewChange }: SidebarProps) {
 
       {/* 푸터 */}
       <div className="p-4 border-t border-gray-700 flex-shrink-0">
-        <div className="text-xs text-gray-500 text-center">
+        <div className="text-sm text-gray-500 text-center">
           <div>MARS</div>
           <div className="text-gray-600 mt-1">made by Team MSG</div>
         </div>

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, memo } from "react";
-import { Send, Bot, User, Loader2, Rocket } from "lucide-react";
+import { Send, Bot, User, Loader2 } from "lucide-react";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { ragMarkdown } from "../config/api";
@@ -194,7 +194,7 @@ export default function ChatArea({ onMessageSent, serverConnected = false }: Cha
     setInputMessage("");
     setIsLoading(true);
 
-    setTimeout(() => { if (textareaRef.current) textareaRef.current.style.height = '40px'; }, 0);
+    setTimeout(() => { if (textareaRef.current) textareaRef.current.style.height = '48px'; }, 0);
 
     const loadingMessage: Message = {
       id: (Date.now() + 1).toString(),
@@ -245,16 +245,6 @@ export default function ChatArea({ onMessageSent, serverConnected = false }: Cha
 
   return (
     <div className="h-full flex flex-col bg-white">
-      <div className="p-4 border-b border-gray-200 flex-shrink-0">
-        <h2 className="text-gray-800 flex items-center gap-2">
-          <Rocket className="w-5 h-5" />
-          MARS – Mission for Astrobiology and Research Support
-        </h2>
-        <p className="text-sm text-gray-600">
-          미세중력, 우주 환경, 우주 생물학 실험에 대해 무엇이든 질문해보세요
-        </p>
-      </div>
-
       <div className="flex-1 p-4 overflow-y-auto" ref={chatListRef}>
         <div className="space-y-4 max-w-6xl mx-auto">
           {messages.map((message: Message, index) => (
@@ -275,7 +265,7 @@ export default function ChatArea({ onMessageSent, serverConnected = false }: Cha
               )}
               
               <div
-                className={`max-w-4xl p-4 rounded-lg ${
+                className={`max-w-4xl p-5 rounded-lg ${
                   message.sender === "user"
                     ? "bg-blue-500 text-white max-w-2xl"
                     : "bg-white text-gray-800 border border-gray-200 shadow-sm"
@@ -287,21 +277,21 @@ export default function ChatArea({ onMessageSent, serverConnected = false }: Cha
                     <ReactMarkdown 
                       remarkPlugins={[remarkGfm]}
                       components={{
-                        h1: ({node, ...props}) => <h1 className="text-xl font-bold mb-3 mt-4 text-gray-800" {...props} />,
-                        h2: ({node, ...props}) => <h2 className="text-lg font-semibold mb-2 mt-3 text-gray-700" {...props} />,
-                        h3: ({node, ...props}) => <h3 className="text-md font-medium mb-2 mt-2 text-gray-600" {...props} />,
-                        p: ({node, ...props}) => <p className="mb-3 text-gray-700 leading-relaxed" {...props} />,
+                        h1: ({node, ...props}) => <h1 className="text-2xl font-bold mb-4 mt-5 text-gray-800" {...props} />,
+                        h2: ({node, ...props}) => <h2 className="text-xl font-semibold mb-3 mt-4 text-gray-700" {...props} />,
+                        h3: ({node, ...props}) => <h3 className="text-lg font-medium mb-3 mt-3 text-gray-600" {...props} />,
+                        p: ({node, ...props}) => <p className="mb-4 text-gray-700 leading-relaxed text-base" {...props} />,
                         strong: ({node, ...props}) => <strong className="font-semibold text-gray-900" {...props} />,
                         em: ({node, ...props}) => <em className="italic text-gray-700" {...props} />,
-                        ul: ({node, ...props}) => <ul className="list-disc list-inside mb-3 space-y-1" {...props} />,
-                        ol: ({node, ...props}) => <ol className="list-decimal list-inside mb-3 space-y-1" {...props} />,
-                        li: ({node, ...props}) => <li className="text-gray-700 ml-2" {...props} />,
-                        blockquote: ({node, ...props}) => <blockquote className="border-l-4 border-blue-400 pl-4 py-2 my-3 bg-blue-50 rounded-r-lg text-gray-700" {...props} />,
+                        ul: ({node, ...props}) => <ul className="list-disc list-inside mb-4 space-y-2" {...props} />,
+                        ol: ({node, ...props}) => <ol className="list-decimal list-inside mb-4 space-y-2" {...props} />,
+                        li: ({node, ...props}) => <li className="text-gray-700 ml-2 text-base" {...props} />,
+                        blockquote: ({node, ...props}) => <blockquote className="border-l-4 border-blue-400 pl-4 py-3 my-4 bg-blue-50 rounded-r-lg text-gray-700" {...props} />,
                         code: ({node, inline, ...props}: any) => 
                           inline 
-                            ? <code className="bg-gray-100 px-1.5 py-0.5 rounded text-sm font-mono text-red-600" {...props} />
-                            : <code className="block bg-gray-100 p-3 rounded-lg text-sm font-mono overflow-x-auto my-2" {...props} />,
-                        a: ({node, ...props}) => <a className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer" {...props} />,
+                            ? <code className="bg-gray-100 px-2 py-1 rounded text-sm font-mono text-red-600" {...props} />
+                            : <code className="block bg-gray-100 p-4 rounded-lg text-sm font-mono overflow-x-auto my-3" {...props} />,
+                        a: ({node, ...props}) => <a className="text-blue-600 hover:underline text-base" target="_blank" rel="noopener noreferrer" {...props} />,
                         img: ({node, src, alt, ...props}) => (
                           <div className="my-4 flex justify-center bg-gray-100 rounded-lg overflow-hidden" style={{ minHeight: '200px' }}>
                             <img 
@@ -328,9 +318,9 @@ export default function ChatArea({ onMessageSent, serverConnected = false }: Cha
                   </div>
                 ) : (
                   // 사용자 메시지는 일반 텍스트
-                  <p className="whitespace-pre-wrap">{message.content}</p>
+                  <p className="whitespace-pre-wrap text-base">{message.content}</p>
                 )}
-                <div className={`text-xs mt-2 ${
+                <div className={`text-sm mt-3 ${
                   message.sender === "user" ? "text-blue-100" : "text-gray-500"
                 }`}>
                   <span>{message.timestamp}</span>
@@ -347,27 +337,27 @@ export default function ChatArea({ onMessageSent, serverConnected = false }: Cha
         </div>
       </div>
 
-      <div className="p-4 border-t border-gray-200 flex-shrink-0 bg-white">
-        <div className="flex gap-2 max-w-4xl mx-auto items-end">
+      <div className="p-5 border-t border-gray-200 flex-shrink-0 bg-white">
+        <div className="flex gap-3 max-w-4xl mx-auto items-end">
           <textarea
             ref={textareaRef}
             value={inputMessage}
             onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setInputMessage(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="우주 생물학에 대해 질문해보세요..."
-            className="flex-1 bg-white border border-gray-300 rounded px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500 resize-none min-h-[40px] max-h-[120px] overflow-y-auto"
+            className="flex-1 bg-white border border-gray-300 rounded px-4 py-3 shadow-sm focus:border-blue-500 focus:ring-blue-500 resize-none min-h-[48px] max-h-[120px] overflow-y-auto text-base"
             disabled={isLoading}
-            style={{ minHeight: '40px', maxHeight: '120px' }}
+            style={{ minHeight: '48px', maxHeight: '120px' }}
           />
           <button
             onClick={sendMessage}
             disabled={!inputMessage.trim() || isLoading}
-            className="bg-blue-500 hover:bg-blue-600 text-white disabled:bg-gray-400 px-4 py-2 rounded flex-shrink-0"
+            className="bg-blue-500 hover:bg-blue-600 text-white disabled:bg-gray-400 px-5 py-3 rounded flex-shrink-0"
           >
             {isLoading ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
+              <Loader2 className="w-5 h-5 animate-spin" />
             ) : (
-              <Send className="w-4 h-4" />
+              <Send className="w-5 h-5" />
             )}
           </button>
         </div>
