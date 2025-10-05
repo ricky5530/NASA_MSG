@@ -144,11 +144,11 @@ async def rag_markdown(payload: dict = Body(...)):
     """
     # 안전한 import (패키지/네임스페이스 환경 모두 지원)
     try:
-        from rag.query_cli import query_to_markdown
+        from backend.rag.query_markdown import query_to_markdown
     except Exception:
         import sys as _sys
         _sys.path.append(str(BASE_DIR / "rag"))
-        from query_cli import query_to_markdown  # type: ignore
+        from query_markdown import query_to_markdown  # type: ignore
 
     q = (payload.get("question") or payload.get("message") or "").strip()
     if not q:
