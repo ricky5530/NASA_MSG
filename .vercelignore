@@ -1,0 +1,13 @@
+# Vercel ignore - backend 폴더 제외
+backend/
+download_rag_data.py
+init_rag.sh
+RAG_SETUP.md
+README.md
+SETUP_GUIDE.md
+QUICK_START.md
+*.yaml
+*.toml
+*.sh
+Dockerfile
+Procfile

@@ -1,0 +1,46 @@
+.vercel
+
+# ===============================
+# Environment / Secrets Ignore
+# ===============================
+# 모든 환경변수 실 파일 무시
+.env
+.env.*
+backend/.env
+frontend/.env
+**/.env.local
+**/.env.development
+**/.env.production
+
+# 템플릿/예시는 추적 허용
+!*.env.example
+!**/.env.example
+
+# ===============================
+# Build / Cache / Logs
+# ===============================
+**/__pycache__/
+*.py[cod]
+*.log
+*.sqlite3
+*.db
+
+# Node / frontend
+frontend/node_modules/
+frontend/dist/
+
+# Python virtual envs
+.venv/
+venv/
+env/
+
+# ===============================
+# Large / Binary Artifacts (선택)
+# ===============================
+# RAG 인덱스는 필요 시 LFS로 관리. 현재는 추적 유지 원하면 주석 처리
+# backend/data/index/*.index
+# backend/data/index/*.faiss
+
+# 기타 도구
+.DS_Store
+Thumbs.db
