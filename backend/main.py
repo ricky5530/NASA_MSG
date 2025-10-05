@@ -85,11 +85,33 @@ app.version = "2.0.0"
 # CORS 설정
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "http://localhost:3000",
+        "http://localhost:5173", 
+        "https://nasamsg.vercel.app",
+        "https://*.vercel.app",
+        "*"
+    ],
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
+
+# CORS preflight 처리를 위한 미들웨어
+@app.middleware("http")
+async def cors_handler(request: Request, call_next):
+    if request.method == "OPTIONS":
+        response = Response()
+        response.headers["access-control-allow-origin"] = "*"
+        response.headers["access-control-allow-methods"] = "GET, POST, PUT, DELETE, OPTIONS"
+        response.headers["access-control-allow-headers"] = "*"
+        response.headers["access-control-allow-credentials"] = "true"
+        return response
+    
+    response = await call_next(request)
+    response.headers["access-control-allow-origin"] = "*"
+    response.headers["access-control-allow-credentials"] = "true"
+    return response
 
 @app.get("/")
 @app.head("/")
