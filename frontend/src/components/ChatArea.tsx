@@ -161,8 +161,7 @@ export default function ChatArea({ onMessageSent, serverConnected = false }: Cha
     const textarea = textareaRef.current;
     if (textarea) {
       textarea.style.height = 'auto';
-      const newHeight = Math.min(textarea.scrollHeight, 120);
-      textarea.style.height = newHeight + 'px';
+      textarea.style.height = textarea.scrollHeight + 'px';
     }
   };
 
@@ -345,9 +344,9 @@ export default function ChatArea({ onMessageSent, serverConnected = false }: Cha
             onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setInputMessage(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="MARS에게 물어보기..."
-            className="w-full bg-white border border-gray-300 rounded-lg px-4 py-3 pr-14 shadow-sm focus:border-blue-500 focus:ring-blue-500 resize-none min-h-[48px] max-h-[120px] overflow-y-auto text-base"
+            className="w-full bg-white border border-gray-300 rounded-lg px-4 py-3 pr-14 shadow-sm focus:border-blue-500 focus:ring-blue-500 resize-none min-h-[48px] text-base overflow-hidden"
             disabled={isLoading}
-            style={{ minHeight: '48px', maxHeight: '120px' }}
+            style={{ minHeight: '48px' }}
           />
           <button
             onClick={sendMessage}
